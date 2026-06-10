@@ -13,6 +13,8 @@ function toNumber(price: Decimal | number): number {
   return Number(price);
 }
 
+export { toNumber };
+
 // ---------------------------------------------------------------------------
 // Currency → locale map
 // ---------------------------------------------------------------------------
