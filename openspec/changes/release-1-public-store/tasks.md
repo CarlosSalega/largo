@@ -33,13 +33,13 @@
 
 ## 4. Product Detail
 
-- [ ] 4.1 Create ProductGallery component (Client)
-- [ ] 4.2 Create ProductInfo component (Server)
-- [ ] 4.3 Create ProductStock component (Server)
-- [ ] 4.4 Create RelatedProducts component (Server)
-- [ ] 4.5 Create product detail queries (Prisma)
-- [ ] 4.6 Compose product detail page.tsx
-- [ ] 4.7 Add dynamic metadata (title, description, OG, JSON-LD)
+- [x] 4.1 Create ProductGallery component (Client)
+- [x] 4.2 Create ProductInfo component (Server)
+- [x] 4.3 Create ProductStock component (Server)
+- [x] 4.4 Create RelatedProducts component (Server)
+- [x] 4.5 Create product detail queries (Prisma)
+- [x] 4.6 Compose product detail page.tsx
+- [x] 4.7 Add dynamic metadata (title, description, OG, JSON-LD)
 
 ## 5. Responsive Design
 
