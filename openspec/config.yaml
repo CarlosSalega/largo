@@ -1,0 +1,43 @@
+schema: spec-driven
+
+context: |
+  Project: Largo — Single-tenant ecommerce MVP for entrepreneurs.
+  Tech stack: Next.js 16, TypeScript, Tailwind CSS v4, Shadcn UI (radix-nova),
+  PostgreSQL, Prisma, Neon, Better Auth, MercadoPago Checkout Pro, Cloudinary, Vercel.
+  Validation: Zod + React Hook Form.
+  Testing: Vitest (unit, planned/not installed), Playwright (e2e, planned/not installed).
+  API: Route Handlers + Server Actions.
+  Roles: ADMIN, CUSTOMER.
+  Business rules:
+    - Single tenant
+    - Guest checkout enabled
+    - Simple stock management (no variants)
+    - MercadoPago Checkout Pro only payment method
+    - Order status controlled by webhook (PENDING -> PAID / CANCELLED / REFUNDED)
+    - Products are independent items (no variant system)
+  Domain structure: Content, Catalog, Cart, Checkout, Orders, Payments, Customers, Administration.
+  Project structure: src/app/ (route groups), src/features/ (domain logic), src/components/ui/, src/lib/.
+
+rules:
+  proposal:
+    - Always include Non-goals section
+    - Reference affected specs by domain name
+  specs:
+    - Use Given/When/Then format for scenarios
+    - Use SHALL/MUST for mandatory requirements, SHOULD for recommended, MAY for optional
+    - Keep specs behavior-focused, no implementation details
+  design:
+    - Reference Prisma models when applicable
+    - Include data flow for payment/webhook scenarios
+  tasks:
+    - Group tasks by domain/feature
+    - Keep tasks completable in one session
+  apply:
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: "pnpm build"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas

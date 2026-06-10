@@ -1,0 +1,219 @@
+// =============================================================================
+// Largo Ecommerce MVP — Prisma Schema v1
+// Based on: openspec/changes/domain-model-prisma-schema/design.md
+//
+// Models:   Brand, Category, Product, ProductImage,
+//           User, Order, OrderItem, Address, Payment, WebhookEvent
+// Enums:    UserRole, OrderStatus, PaymentStatus
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REFUNDED
+}
+
+// =============================================================================
+// CORE ENTITIES
+// =============================================================================
+
+model Brand {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  slug      String    @unique
+  logo      String?
+  active    Boolean   @default(true)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([active])
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  image       String?
+  featured    Boolean   @default(false)
+  active      Boolean   @default(true)
+  deletedAt   DateTime?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([active])
+  @@index([featured])
+}
+
+model Product {
+  id          String         @id @default(uuid())
+  name        String
+  slug        String         @unique
+  description String
+  price       Decimal        @db.Decimal(10, 2)
+  stock       Int            @default(0)
+  featured    Boolean        @default(false)
+  active      Boolean        @default(true)
+  deletedAt   DateTime?
+  brandId     String
+  categoryId  String
+  brand       Brand          @relation(fields: [brandId], references: [id])
+  category    Category       @relation(fields: [categoryId], references: [id])
+  images      ProductImage[]
+  orderItems  OrderItem[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([slug])
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([active])
+  @@index([featured])
+  @@index([categoryId, active])
+  @@index([brandId, active])
+}
+
+model ProductImage {
+  id        String   @id @default(uuid())
+  url       String
+  alt       String?
+  order     Int      @default(0)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+// =============================================================================
+// USER ENTITIES
+// =============================================================================
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String
+  passwordHash  String
+  role          UserRole @default(CUSTOMER)
+  emailVerified Boolean  @default(false)
+  orders        Order[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([email])
+}
+
+// =============================================================================
+// COMMERCE ENTITIES
+// =============================================================================
+
+model Order {
+  id            String      @id @default(uuid())
+  orderNumber   String      @unique
+  status        OrderStatus @default(PENDING)
+  customerEmail String
+  customerName  String
+  customerPhone String?
+  subtotal      Decimal     @db.Decimal(10, 2)
+  total         Decimal     @db.Decimal(10, 2)
+  userId        String?
+  user          User?       @relation(fields: [userId], references: [id])
+  address       Address?
+  items         OrderItem[]
+  payment       Payment?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([orderNumber])
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([userId, createdAt])
+}
+
+model OrderItem {
+  id           String  @id @default(uuid())
+  orderId      String
+  productId    String
+  productName  String
+  productPrice Decimal @db.Decimal(10, 2)
+  productImage String?
+  quantity     Int
+  subtotal     Decimal @db.Decimal(10, 2)
+  order        Order   @relation(fields: [orderId], references: [id])
+  product      Product @relation(fields: [productId], references: [id])
+}
+
+model Address {
+  id      String @id @default(uuid())
+  street  String
+  city    String
+  state   String
+  zipCode String
+  country String
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id])
+}
+
+// =============================================================================
+// PAYMENT ENTITIES
+// =============================================================================
+
+model Payment {
+  id                   String        @id @default(uuid())
+  orderId              String        @unique
+  provider             String        @default("mercadopago")
+  providerPaymentId    String?
+  providerPreferenceId String?
+  status               PaymentStatus @default(PENDING)
+  amount               Decimal       @db.Decimal(10, 2)
+  currency             String        @default("ARS")
+  paidAt               DateTime?
+  order                Order         @relation(fields: [orderId], references: [id])
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  @@index([orderId])
+  @@index([providerPaymentId])
+}
+
+model WebhookEvent {
+  id          String    @id @default(uuid())
+  provider    String    @default("mercadopago")
+  eventId     String    @unique
+  type        String
+  payload     Json
+  processed   Boolean   @default(false)
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([eventId])
+  @@index([provider, type])
+}
