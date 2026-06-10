@@ -80,6 +80,7 @@ model Product {
   slug        String         @unique
   description String
   price       Decimal        @db.Decimal(10, 2)
+  currency    String         @default("USD")
   stock       Int            @default(0)
   featured    Boolean        @default(false)
   active      Boolean        @default(true)

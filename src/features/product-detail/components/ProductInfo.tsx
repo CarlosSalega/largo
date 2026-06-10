@@ -31,7 +31,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
       {/* Price */}
       <p className="text-3xl font-bold text-foreground">
-        {formatPrice(product.price)}
+        {formatPrice(product.price, product.currency)}
       </p>
 
       {/* Description */}

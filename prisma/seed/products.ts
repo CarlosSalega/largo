@@ -240,6 +240,7 @@ export async function seedProducts(
         slug: slugify(p.name),
         description: p.description,
         price: p.price,
+        currency: p.currency,
         stock: p.stock,
         featured: p.featured,
         brandId: brandId(p.brandName),

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatPrice } from "@/lib/formatPrice";
 import type { Product, ProductImage, Category, Brand } from "@/lib/db/types";
 
 export type ProductCardProduct = Product & {
@@ -10,17 +11,6 @@ export type ProductCardProduct = Product & {
 
 interface ProductCardProps {
   product: ProductCardProduct;
-}
-
-function formatPrice(price: unknown): string {
-  const num =
-    typeof price === "object" && price !== null && "toNumber" in price
-      ? (price as { toNumber(): number }).toNumber()
-      : Number(price);
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(num);
 }
 
 export function ProductCard({ product }: ProductCardProps) {
@@ -65,7 +55,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </h3>
             <div className="mt-auto pt-2 flex items-center justify-between">
               <p className="text-lg font-bold text-foreground">
-                {formatPrice(product.price)}
+                {formatPrice(product.price, product.currency)}
               </p>
               {inStock && (
                 <span className="text-xs font-medium text-emerald-600">

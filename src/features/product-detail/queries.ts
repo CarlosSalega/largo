@@ -18,26 +18,10 @@ export type RelatedProduct = Product & {
 };
 
 // ---------------------------------------------------------------------------
-// Helpers
+// Helpers — re-exported from centralized lib
 // ---------------------------------------------------------------------------
 
-function toNumber(price: unknown): number {
-  if (typeof price === "object" && price !== null && "toNumber" in price) {
-    return (price as { toNumber(): number }).toNumber();
-  }
-  return Number(price);
-}
-
-export function formatPrice(price: unknown): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(toNumber(price));
-}
-
-export function priceAsString(price: unknown): string {
-  return toNumber(price).toFixed(2);
-}
+export { formatPrice, priceAsString } from "@/lib/formatPrice";
 
 // ---------------------------------------------------------------------------
 // Queries

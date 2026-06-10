@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatPrice } from "@/lib/formatPrice";
 import type { Product, ProductImage, Category } from "@/lib/db/types";
 
 type FeaturedProduct = Product & {
@@ -9,17 +10,6 @@ type FeaturedProduct = Product & {
 
 interface FeaturedProductsProps {
   products: FeaturedProduct[];
-}
-
-function formatPrice(price: unknown): string {
-  const num =
-    typeof price === "object" && price !== null && "toNumber" in price
-      ? (price as { toNumber(): number }).toNumber()
-      : Number(price);
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(num);
 }
 
 export function FeaturedProducts({ products }: FeaturedProductsProps) {
@@ -65,7 +55,7 @@ export function FeaturedProducts({ products }: FeaturedProductsProps) {
                       {product.name}
                     </h3>
                     <p className="mt-2 text-lg font-bold text-foreground">
-                      {formatPrice(product.price)}
+                      {formatPrice(product.price, product.currency)}
                     </p>
                   </div>
                 </CardContent>
