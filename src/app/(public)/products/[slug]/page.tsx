@@ -6,6 +6,7 @@ import {
   getRelatedProducts,
   priceAsString,
 } from "@/features/product-detail/queries";
+import { toNumber } from "@/lib/formatPrice";
 import { ProductGallery } from "@/features/product-detail/components/ProductGallery";
 import { ProductInfo } from "@/features/product-detail/components/ProductInfo";
 import { ProductStock } from "@/features/product-detail/components/ProductStock";
@@ -87,7 +88,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     offers: {
       "@type": "Offer",
       price: priceAsString(product.price),
-      priceCurrency: "USD",
+      priceCurrency: product.currency,
       availability:
         product.stock > 0
           ? "https://schema.org/InStock"
@@ -116,7 +117,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Info + stock column */}
             <div className="flex flex-col gap-8">
               <ProductInfo product={product} />
-              <ProductStock stock={product.stock} />
+              <ProductStock
+                stock={product.stock}
+                productId={product.id}
+                slug={product.slug}
+                name={product.name}
+                price={toNumber(product.price)}
+                currency={product.currency}
+                image={product.images[0]?.url ?? null}
+              />
             </div>
           </div>
         </div>
