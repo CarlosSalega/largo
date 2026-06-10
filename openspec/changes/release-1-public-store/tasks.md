@@ -2,22 +2,22 @@
 
 ## 1. Layout & Navigation
 
-- [ ] 1.1 Create `(public)` route group layout
-- [ ] 1.2 Create Header component with logo and navigation
-- [ ] 1.3 Create Footer component with store info and links
-- [ ] 1.4 Create Navigation component (mobile responsive)
-- [ ] 1.5 Add global styles to `globals.css`
+- [x] 1.1 Create `(public)` route group layout
+- [x] 1.2 Create Header component with logo and navigation
+- [x] 1.3 Create Footer component with store info and links
+- [x] 1.4 Create Navigation component (mobile responsive)
+- [x] 1.5 Add global styles to `globals.css`
 
 ## 2. Homepage
 
-- [ ] 2.1 Create Hero component with banner and CTA
-- [ ] 2.2 Create Benefits component (3-4 benefits)
-- [ ] 2.3 Create FeaturedCategories component (up to 6)
-- [ ] 2.4 Create FeaturedProducts component (up to 8)
-- [ ] 2.5 Create FeaturedBrands component
-- [ ] 2.6 Create homepage queries (Prisma)
-- [ ] 2.7 Compose homepage page.tsx
-- [ ] 2.8 Add homepage metadata (title, description, OG)
+- [x] 2.1 Create Hero component with banner and CTA
+- [x] 2.2 Create Benefits component (3-4 benefits)
+- [x] 2.3 Create FeaturedCategories component (up to 6)
+- [x] 2.4 Create FeaturedProducts component (up to 8)
+- [x] 2.5 Create FeaturedBrands component
+- [x] 2.6 Create homepage queries (Prisma)
+- [x] 2.7 Compose homepage page.tsx
+- [x] 2.8 Add homepage metadata (title, description, OG)
 
 ## 3. Catalog
 
