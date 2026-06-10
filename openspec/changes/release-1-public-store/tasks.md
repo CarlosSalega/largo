@@ -21,15 +21,15 @@
 
 ## 3. Catalog
 
-- [ ] 3.1 Create ProductCard component
-- [ ] 3.2 Create ProductGrid component (Server)
-- [ ] 3.3 Create CatalogSearch component (Client)
-- [ ] 3.4 Create CatalogFilters component (Client)
-- [ ] 3.5 Create CatalogPagination component (Client)
-- [ ] 3.6 Create catalog queries (Prisma)
-- [ ] 3.7 Create API route for catalog queries
-- [ ] 3.8 Compose catalog page.tsx
-- [ ] 3.9 Add catalog metadata
+- [x] 3.1 Create ProductCard component
+- [x] 3.2 Create ProductGrid component (Server)
+- [x] 3.3 Create CatalogSearch component (Client)
+- [x] 3.4 Create CatalogFilters component (Client)
+- [x] 3.5 Create CatalogPagination component (Client)
+- [x] 3.6 Create catalog queries (Prisma)
+- [x] 3.7 Create API route for catalog queries
+- [x] 3.8 Compose catalog page.tsx
+- [x] 3.9 Add catalog metadata
 
 ## 4. Product Detail
 
