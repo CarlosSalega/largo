@@ -87,9 +87,23 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   let mpPayment: { status?: string; external_reference?: string; id?: number };
   try {
     const response = await getMPPayment(paymentId);
-    mpPayment = response;
+
+    // Guard: if MP returned an error or malformed response, treat as not found.
+    // The MercadoPago API returns 404 when the payment ID doesn't exist.
+    if (!response || typeof response !== "object" || !("id" in response)) {
+      return NextResponse.json(
+        { error: "Payment not found in MercadoPago" },
+        { status: 404 }
+      );
+    }
+
+    mpPayment = response as typeof mpPayment;
   } catch {
-    // Payment not found or MP API error
+    // Payment not found (404) or MP API unreachable.
+    // Returning 404 tells MercadoPago to retry the webhook later.
+    console.error(
+      `[webhook] Failed to fetch MP payment ${paymentId}`
+    );
     return NextResponse.json(
       { error: "Payment not found" },
       { status: 404 }
@@ -150,10 +164,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         where: { id: order.id },
         data: { status: "CANCELLED" },
       });
+      // Release reserved stock atomically within the same transaction
+      await releaseStock(order.id, tx);
     });
-
-    // Release reserved stock
-    await releaseStock(order.id);
   }
   // For other statuses (e.g. "pending", "in_process") we do nothing —
   // MercadoPago will send another webhook when the status changes.

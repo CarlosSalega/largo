@@ -66,7 +66,7 @@ export function CatalogSearch() {
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        placeholder="Search products..."
+        placeholder="Buscar productos..."
         className="w-full rounded-lg border border-input bg-background py-2 pl-10 pr-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20 transition-colors"
       />
       {value && (

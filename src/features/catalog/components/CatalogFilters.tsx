@@ -14,10 +14,10 @@ interface CatalogFiltersProps {
 }
 
 const sortOptions = [
-  { value: "", label: "Default" },
-  { value: "price_asc", label: "Price: Low to High" },
-  { value: "price_desc", label: "Price: High to Low" },
-  { value: "name_asc", label: "Name: A-Z" },
+  { value: "", label: "Por defecto" },
+  { value: "price_asc", label: "Precio: menor a mayor" },
+  { value: "price_desc", label: "Precio: mayor a menor" },
+  { value: "name_asc", label: "Nombre: A-Z" },
 ] as const;
 
 export function CatalogFilters({ categories, brands }: CatalogFiltersProps) {
@@ -59,9 +59,9 @@ export function CatalogFilters({ categories, brands }: CatalogFiltersProps) {
           value={currentCategory}
           onChange={(e) => updateParam("category", e.target.value)}
           className={selectClass}
-          aria-label="Filter by category"
+          aria-label="Filtrar por categoría"
         >
-          <option value="">All Categories</option>
+          <option value="">Todas las categorías</option>
           {categories.map((cat) => (
             <option key={cat.slug} value={cat.slug}>
               {cat.name}
@@ -76,9 +76,9 @@ export function CatalogFilters({ categories, brands }: CatalogFiltersProps) {
           value={currentBrand}
           onChange={(e) => updateParam("brand", e.target.value)}
           className={selectClass}
-          aria-label="Filter by brand"
+          aria-label="Filtrar por marca"
         >
-          <option value="">All Brands</option>
+          <option value="">Todas las marcas</option>
           {brands.map((b) => (
             <option key={b.slug} value={b.slug}>
               {b.name}
@@ -92,7 +92,7 @@ export function CatalogFilters({ categories, brands }: CatalogFiltersProps) {
         value={currentSort}
         onChange={(e) => updateParam("sort", e.target.value)}
         className={selectClass}
-        aria-label="Sort products"
+        aria-label="Ordenar productos"
       >
         {sortOptions.map((opt) => (
           <option key={opt.value} value={opt.value}>
@@ -111,7 +111,7 @@ export function CatalogFilters({ categories, brands }: CatalogFiltersProps) {
             type="button"
             onClick={() => updateParam("search", "")}
             className="ml-0.5 text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Clear search filter"
+            aria-label="Quitar filtro de búsqueda"
           >
             ×
           </button>

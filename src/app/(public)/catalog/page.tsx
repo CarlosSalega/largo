@@ -25,15 +25,15 @@ interface CatalogPageProps {
 // ---------------------------------------------------------------------------
 
 export const metadata: Metadata = {
-  title: "Products",
+  title: "Productos | Largo",
   description:
-    "Browse our full catalog of premium technology products. Smartphones, laptops, audio, tablets, monitors, and accessories from Apple, Samsung, Sony, LG, and Dell.",
+    "Explorá nuestro catálogo completo de productos tecnológicos. Smartphones, laptops, audio, tablets, monitores y accesorios de Apple, Samsung, Sony, LG y Dell.",
   openGraph: {
-    title: "Products | Largo",
+    title: "Productos | Largo",
     description:
-      "Browse our full catalog of premium technology products.",
+      "Explorá nuestro catálogo completo de productos tecnológicos.",
     type: "website",
-    locale: "en_US",
+    locale: "es_AR",
   },
 };
 
@@ -113,12 +113,12 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Products
+            Productos
           </h1>
           <p className="mt-3 text-lg text-muted-foreground">
             {total > 0
-              ? `Showing ${products.length} of ${total} products`
-              : "Browse our catalog"}
+              ? `Mostrando ${products.length} de ${total} productos`
+              : "Explorá nuestro catálogo"}
           </p>
         </div>
 

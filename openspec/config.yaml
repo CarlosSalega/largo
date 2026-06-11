@@ -19,6 +19,9 @@ context: |
   Project structure: src/app/ (route groups), src/features/ (domain logic), src/components/ui/, src/lib/.
 
 rules:
+  i18n:
+    - User-facing text (labels, placeholders, metadata, toasts, errors, aria-labels, CTAs, SEO) MUST be in Spanish oriented to Argentina
+    - Code (variables, functions, types, filenames, internal comments) MUST remain in English
   proposal:
     - Always include Non-goals section
     - Reference affected specs by domain name

@@ -32,12 +32,12 @@ export function CartPageContent() {
           className="size-16 text-muted-foreground mx-auto"
           strokeWidth={1.5}
         />
-        <h1 className="text-2xl font-bold">Your cart is empty</h1>
+        <h1 className="text-2xl font-bold">Tu carrito está vacío</h1>
         <p className="text-muted-foreground">
-          Looks like you haven&apos;t added anything yet.
+          Parece que no agregaste nada todavía.
         </p>
         <Button asChild variant="outline" size="lg">
-          <Link href="/catalog">Browse products</Link>
+          <Link href="/catalog">Ver productos</Link>
         </Button>
       </div>
     );
@@ -47,9 +47,9 @@ export function CartPageContent() {
     <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Cart</h1>
+        <h1 className="text-2xl font-bold">Carrito</h1>
         <Button variant="ghost" size="sm" onClick={clearCart}>
-          Clear cart
+          Vaciar carrito
         </Button>
       </div>
 
@@ -68,7 +68,7 @@ export function CartPageContent() {
       {/* Continue shopping */}
       <div className="text-center">
         <Button asChild variant="link" size="sm">
-          <Link href="/catalog">Continue shopping</Link>
+          <Link href="/catalog">Seguir comprando</Link>
         </Button>
       </div>
     </div>

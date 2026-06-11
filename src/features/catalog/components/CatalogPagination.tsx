@@ -54,7 +54,7 @@ export function CatalogPagination({
   return (
     <nav
       className="flex items-center justify-center gap-1 pt-8"
-      aria-label="Pagination"
+      aria-label="Paginación"
     >
       {/* Previous */}
       <button
@@ -65,7 +65,7 @@ export function CatalogPagination({
           baseBtnClass,
           "text-muted-foreground hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
         )}
-        aria-label="Previous page"
+        aria-label="Página anterior"
       >
         <ChevronLeft className="size-4" />
       </button>
@@ -96,7 +96,7 @@ export function CatalogPagination({
                 : "text-muted-foreground hover:bg-muted hover:text-foreground"
             )}
             aria-current={isActive ? "page" : undefined}
-            aria-label={`Page ${page}`}
+            aria-label={`Página ${page}`}
           >
             {page}
           </button>
@@ -112,7 +112,7 @@ export function CatalogPagination({
           baseBtnClass,
           "text-muted-foreground hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
         )}
-        aria-label="Next page"
+        aria-label="Página siguiente"
       >
         <ChevronRight className="size-4" />
       </button>
