@@ -160,10 +160,7 @@ export default async function AdminCategoriesPage({
                     {/* Active badge */}
                     <TableCell className="text-center">
                       {category.active ? (
-                        <Badge
-                          variant="secondary"
-                          className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                        >
+                        <Badge variant="default">
                           Activo
                         </Badge>
                       ) : (

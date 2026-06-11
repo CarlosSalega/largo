@@ -29,6 +29,7 @@ import {
 import { ProductRowActions } from "@/components/admin/ProductRowActions";
 import { getAdminProducts } from "@/features/admin/queries";
 import { formatPrice } from "@/lib/formatPrice";
+import { SafeImage } from "@/components/ui/safe-image";
 import { resolveCloudinaryUrl } from "@/lib/cloudinary/resolve-url";
 
 // ── Metadata ─────────────────────────────────────────────────────────────────
@@ -201,16 +202,15 @@ export default async function AdminProductsPage({
                     {/* Thumbnail */}
                     <TableCell>
                       {product.images[0] ? (
-                        <img
-                          src={resolveCloudinaryUrl(
-                            product.images[0].publicId ?? product.images[0].url,
-                            "thumbnail",
-                          )}
-                          alt={product.images[0].alt ?? product.name}
-                          className="size-10 rounded-md object-cover"
-                          loading="lazy"
-                          decoding="async"
-                        />
+                        <div className="relative size-10 overflow-hidden rounded-md">
+                          <SafeImage
+                            src={resolveCloudinaryUrl(
+                              product.images[0].publicId ?? product.images[0].url,
+                              "thumbnail",
+                            )}
+                            alt={product.images[0].alt ?? product.name}
+                          />
+                        </div>
                       ) : (
                         <div className="flex size-10 items-center justify-center rounded-md bg-muted">
                           <span className="text-xs text-muted-foreground">—</span>
