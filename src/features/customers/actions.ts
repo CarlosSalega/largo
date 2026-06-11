@@ -131,7 +131,7 @@ export async function changePasswordAction(data: PasswordInput) {
       err instanceof Error ? err.message.toLowerCase() : String(err);
 
     if (message.includes("invalid") || message.includes("incorrect")) {
-      return { error: "La contraseña actual es incorrecta" };
+      return { error: "Contraseña actual incorrecta" };
     }
 
     if (message.includes("unauthorized") || message.includes("session")) {
