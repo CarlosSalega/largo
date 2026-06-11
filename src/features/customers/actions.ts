@@ -1,11 +1,16 @@
 "use server";
 
 // ---------------------------------------------------------------------------
-// Customer auth Server Actions — sign-in, sign-up, sign-out
+// Customer Server Actions — sign-in, sign-up, sign-out, profile, password
 // ---------------------------------------------------------------------------
 
 import { auth } from "@/lib/auth/config";
-import type { SignInInput, SignUpInput } from "@/features/customers/schemas";
+import type {
+  SignInInput,
+  SignUpInput,
+  ProfileInput,
+  PasswordInput,
+} from "@/features/customers/schemas";
 
 function defaultName(email: string): string {
   return email.split("@")[0] ?? "Usuario";
@@ -78,5 +83,61 @@ export async function signOutAction() {
     return { success: true as const };
   } catch {
     return { error: "Error al cerrar sesión" };
+  }
+}
+
+// ---- updateProfileAction ----------------------------------------------------
+
+export async function updateProfileAction(data: ProfileInput) {
+  const { headers } = await import("next/headers");
+
+  try {
+    await auth.api.updateUser({
+      headers: await headers(),
+      body: { name: data.name },
+    });
+
+    return { success: true as const };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message.toLowerCase() : String(err);
+
+    if (message.includes("unauthorized") || message.includes("session")) {
+      return { error: "Sesión expirada. Volvé a iniciar sesión." };
+    }
+
+    return { error: "Error al actualizar el perfil. Intentá de nuevo." };
+  }
+}
+
+// ---- changePasswordAction ---------------------------------------------------
+
+export async function changePasswordAction(data: PasswordInput) {
+  const { headers } = await import("next/headers");
+
+  try {
+    await auth.api.changePassword({
+      headers: await headers(),
+      body: {
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+        revokeOtherSessions: false,
+      },
+    });
+
+    return { success: true as const };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message.toLowerCase() : String(err);
+
+    if (message.includes("invalid") || message.includes("incorrect")) {
+      return { error: "Contraseña actual incorrecta" };
+    }
+
+    if (message.includes("unauthorized") || message.includes("session")) {
+      return { error: "Sesión expirada. Volvé a iniciar sesión." };
+    }
+
+    return { error: "Error al cambiar la contraseña. Intentá de nuevo." };
   }
 }

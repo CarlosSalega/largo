@@ -1,44 +1,6 @@
-# Customers Specification
+# Delta for Customers — Release 3
 
-## Purpose
-
-Customer registration, authentication, profile management, and order history access.
-
-## Requirements
-
-### REQ-CUST-01: Customer Registration
-The system SHALL register customers with email and password only, in one step, without email verification.
-
-#### Scenario: Successful registration
-- GIVEN a visitor provides a valid email and password
-- WHEN registration is submitted
-- THEN a customer account is created with role CUSTOMER and the customer is authenticated immediately
-
-#### Scenario: Duplicate email
-- GIVEN an account with email "user@example.com" exists
-- WHEN a visitor registers with the same email
-- THEN registration is rejected with "El email ya está registrado"
-
-### REQ-CUST-02: Customer Sign In
-The system SHALL sign in customers with email and password in one step, creating a session.
-
-#### Scenario: Valid sign in
-- GIVEN a customer account exists
-- WHEN valid email and password are submitted
-- THEN a session is created and the customer is redirected to `/account`
-
-#### Scenario: Invalid credentials
-- GIVEN a customer account exists
-- WHEN invalid credentials are provided
-- THEN sign in is rejected with "Email o contraseña incorrectos"
-
-### REQ-CUST-03: Customer Sign Out
-The system SHALL clear the session and redirect to home on sign out.
-
-#### Scenario: Sign out
-- GIVEN a customer is authenticated
-- WHEN the customer clicks "Salir"
-- THEN the session is cleared and the customer is redirected to `/`
+## ADDED Requirements
 
 ### REQ-CUST-04: Single-Page Auth Toggle
 The system SHALL render Sign In and Sign Up on `/ingresar` with a toggle.
@@ -87,8 +49,48 @@ The system SHALL display authentication state in the global Header component.
 - WHEN viewing any page
 - THEN Header shows "Ingresar" link
 
+## MODIFIED Requirements
+
+### REQ-CUST-01: Customer Registration
+The system SHALL register customers with email and password only, in one step, without email verification.
+(Previously: required name field on registration.)
+
+#### Scenario: Successful registration
+- GIVEN a visitor provides a valid email and password
+- WHEN registration is submitted
+- THEN a customer account is created with role CUSTOMER and the customer is authenticated immediately
+
+#### Scenario: Duplicate email
+- GIVEN an account with email "user@example.com" exists
+- WHEN a visitor registers with the same email
+- THEN registration is rejected with "El email ya está registrado"
+
+### REQ-CUST-02: Customer Sign In
+The system SHALL sign in customers with email and password in one step, creating a session.
+(Previously: generic credential authentication.)
+
+#### Scenario: Valid sign in
+- GIVEN a customer account exists
+- WHEN valid email and password are submitted
+- THEN a session is created and the customer is redirected to `/account`
+
+#### Scenario: Invalid credentials
+- GIVEN a customer account exists
+- WHEN invalid credentials are provided
+- THEN sign in is rejected with "Email o contraseña incorrectos"
+
+### REQ-CUST-03: Customer Sign Out
+The system SHALL clear the session and redirect to home on sign out.
+(Previously: generic logout with homepage redirect.)
+
+#### Scenario: Sign out
+- GIVEN a customer is authenticated
+- WHEN the customer clicks "Salir"
+- THEN the session is cleared and the customer is redirected to `/`
+
 ### REQ-CUST-08: Order History
 The system SHALL display the customer's order history, most recent first.
+(Previously: unspecified ordering.)
 
 #### Scenario: Customer has orders
 - GIVEN a customer has placed orders
@@ -102,6 +104,7 @@ The system SHALL display the customer's order history, most recent first.
 
 ### REQ-CUST-09: Order Detail
 The system SHALL show full order details at `/account/orders/[orderNumber]`.
+(Previously: unspecified URL pattern.)
 
 #### Scenario: View order
 - GIVEN a customer has an order
@@ -115,22 +118,21 @@ The system SHALL show full order details at `/account/orders/[orderNumber]`.
 
 ### REQ-CUST-10: Guest Order Linking
 The system SHALL link guest orders to a customer account server-side upon registration when emails match.
+(Previously: link on registration; implementation unspecified.)
 
 #### Scenario: Link on registration
 - GIVEN guest orders exist with email "user@example.com"
 - WHEN a customer registers with the same email
 - THEN previous guest orders are associated with the new account via server-side hook
 
-### REQ-CUST-11: Profile Name Update
-The system SHALL allow customers to update their name from `/account/profile`.
+### REQ-CUST-11 & REQ-CUST-12: Profile Management
+The system SHALL allow customers to update their name and change their password from `/account/profile`.
+(Previously: generic profile update.)
 
 #### Scenario: Update name
 - GIVEN a customer is authenticated
 - WHEN the customer saves a new name
 - THEN the name is persisted
-
-### REQ-CUST-12: Password Change
-The system SHALL allow customers to change their password from `/account/profile`.
 
 #### Scenario: Change password
 - GIVEN a customer is authenticated

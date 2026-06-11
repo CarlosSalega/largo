@@ -2,15 +2,21 @@
 
 // ---------------------------------------------------------------------------
 // SignOutButton — client component wrapping signOutAction in a form
+// Redirects to home after sign-out to avoid stale "No autorizado" flash
 // ---------------------------------------------------------------------------
 
+import { useRouter } from "next/navigation";
 import { signOutAction } from "@/features/customers/actions";
 
 export function SignOutButton() {
+  const router = useRouter();
+
   return (
     <form
       action={async () => {
         await signOutAction();
+        router.push("/");
+        router.refresh();
       }}
     >
       <button
