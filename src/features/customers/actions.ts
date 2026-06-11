@@ -32,6 +32,11 @@ export async function signUpAction(data: SignUpInput) {
 
     return { success: true as const };
   } catch (err: unknown) {
+    // Better Auth throws ZodError for validation failures
+    if (err && typeof err === "object" && "name" in err && err.name === "ZodError") {
+      return { error: "La contraseña debe tener al menos 8 caracteres" };
+    }
+
     const message =
       err instanceof Error ? err.message.toLowerCase() : String(err);
 

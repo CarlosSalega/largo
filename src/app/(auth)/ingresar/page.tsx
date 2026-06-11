@@ -48,6 +48,7 @@ export default function IngresarPage() {
         toast.error(result.error);
       } else {
         toast.success("¡Bienvenido!");
+        router.refresh();
         router.push("/account");
       }
     } catch {
