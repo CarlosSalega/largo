@@ -119,11 +119,12 @@ model ProductImage {
 // =============================================================================
 
 model user {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String
-  image     String?
-  role      UserRole @default(CUSTOMER)
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String
+  emailVerified Boolean  @default(false)
+  image         String?
+  role          UserRole @default(CUSTOMER)
   orders    Order[]
   sessions  session[]
   accounts  account[]
