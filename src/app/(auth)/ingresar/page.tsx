@@ -8,19 +8,17 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type { Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import {
   signInSchema,
   type SignInInput,
 } from "@/features/customers/schemas";
-import { signInAction, signUpAction } from "@/features/customers/actions";
+import { authClient } from "@/lib/auth/client";
 
 type AuthMode = "signin" | "signup";
 
 export default function IngresarPage() {
-  const router = useRouter();
   const [mode, setMode] = useState<AuthMode>("signin");
   const [pending, setPending] = useState(false);
 
@@ -43,11 +41,12 @@ export default function IngresarPage() {
   async function onSubmit(data: SignInInput) {
     setPending(true);
     try {
-      const action = mode === "signin" ? signInAction : signUpAction;
-      const result = await action(data);
+      const { error } = mode === "signin"
+        ? await authClient.signIn.email(data)
+        : await authClient.signUp.email({ ...data, name: data.email.split("@")[0] });
 
-      if (result.error) {
-        toast.error(result.error);
+      if (error) {
+        toast.error(error.message ?? "Error al procesar la solicitud");
       } else {
         toast.success("¡Bienvenido!");
         window.location.href = "/account";
