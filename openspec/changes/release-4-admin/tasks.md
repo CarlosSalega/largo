@@ -48,13 +48,13 @@ Chain strategy: feature-branch-chain
 
 ## Phase 3: Product CRUD + Brand + Sidebar (PR 3)
 
-- [ ] 3.1 Install shadcn `dialog command` + create `src/features/admin/products/schemas.ts` (Zod: all product fields)
-- [ ] 3.2 Create `src/features/admin/products/queries.ts`: paginated list with filter tabs (Todos/Activos/Sin stock/Con stock) + getById
-- [ ] 3.3 Create `src/features/admin/products/actions.ts`: create, update, toggleActive, toggleFeatured, archive, reorderImages, createBrandInline — all `requireAdmin()`
-- [ ] 3.4 Create `BrandCombobox.tsx` (Command + inline create) + `SidebarToggle.tsx` (collapsible CSS transition) + `DataTable.tsx` (generic table wrapper)
-- [ ] 3.5 Create `src/app/admin/products/page.tsx`: server table, search, pagination, filter tabs, toggle switches per row
-- [ ] 3.6 Create `src/app/admin/products/new/page.tsx` + `[id]/edit/page.tsx`: RHF+Zod forms with ImageUpload + BrandCombobox
-- [ ] 3.7 Verify `pnpm build` + `pnpm lint`
+- [x] 3.1 Install shadcn `dialog command` + create `src/features/admin/products/schemas.ts` (Zod: all product fields)
+- [x] 3.2 Create `src/features/admin/products/queries.ts`: paginated list with filter tabs (Todos/Activos/Sin stock/Con stock) + getById
+- [x] 3.3 Create `src/features/admin/products/actions.ts`: create, update, toggleActive, toggleFeatured, archive, reorderImages, createBrandInline — all `requireAdmin()`
+- [x] 3.4 Create `BrandCombobox.tsx` (Command + inline create) + `SidebarToggle.tsx` (collapsible CSS transition) + `DataTable.tsx` (generic table wrapper)
+- [x] 3.5 Create `src/app/admin/products/page.tsx`: server table, search, pagination, filter tabs, toggle switches per row
+- [x] 3.6 Create `src/app/admin/products/new/page.tsx` + `[id]/edit/page.tsx`: RHF+Zod forms with ImageUpload + BrandCombobox
+- [x] 3.7 Verify `pnpm build` + `pnpm lint`
 
 ## Phase 4: Category CRUD (PR 4)
 
@@ -67,8 +67,8 @@ Chain strategy: feature-branch-chain
 
 ## Phase 5: Order Management (PR 5)
 
-- [ ] 5.1 Install shadcn `alert-dialog` + create `src/features/admin/orders/{schemas,queries}.ts` (status, date, search filters)
-- [ ] 5.2 Create `src/features/admin/orders/actions.ts`: `updateOrderToRefunded` — PAID→REFUNDED only via `$transaction` Order+Payment
-- [ ] 5.3 Create `src/app/admin/orders/page.tsx`: status dropdown, date range, search, server table, pagination
-- [ ] 5.4 Create `src/app/admin/orders/[orderNumber]/page.tsx`: full detail, AlertDialog refund confirmation, `OrderStatusBadge` reuse
-- [ ] 5.5 Verify `pnpm build` + `pnpm lint`
+- [x] 5.1 Add order queries (`getAdminOrdersList`) to `src/features/admin/queries.ts` with status, date, search filters
+- [x] 5.2 Add `refundOrder` action to `src/features/admin/actions.ts` — PAID→REFUNDED via `$transaction` Order+Payment
+- [x] 5.3 Create `src/app/admin/orders/page.tsx`: status dropdown, date range, search, server table, pagination
+- [x] 5.4 Create `src/app/admin/orders/[orderNumber]/page.tsx`: full detail, AlertDialog refund confirmation, `OrderStatusBadge` reuse
+- [x] 5.5 Verify `pnpm build` + `pnpm lint`

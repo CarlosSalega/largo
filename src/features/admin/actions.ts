@@ -627,6 +627,54 @@ export async function addCategoryImage(
   }
 }
 
+// ── Order Actions ────────────────────────────────────────────────────────────
+
+export async function refundOrder(
+  orderId: string,
+): Promise<{ success: true } | { error: string }> {
+  try {
+    await requireAdmin();
+
+    const order = await db.order.findUnique({
+      where: { id: orderId },
+      select: { id: true, status: true },
+    });
+
+    if (!order) {
+      return { error: "Orden no encontrada." };
+    }
+
+    if (order.status !== "PAID") {
+      return { error: "La orden debe estar en estado PAID para reembolsar" };
+    }
+
+    await db.$transaction(async (tx: Prisma.TransactionClient) => {
+      await tx.order.update({
+        where: { id: orderId },
+        data: { status: "REFUNDED" },
+      });
+
+      await tx.payment.update({
+        where: { orderId },
+        data: { status: "REFUNDED" },
+      });
+    });
+
+    revalidatePath("/admin/orders");
+    revalidatePath(`/admin/orders/${orderId}`);
+
+    return { success: true };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message.toLowerCase() : String(err);
+
+    if (message.includes("not found")) {
+      return { error: "Orden no encontrada." };
+    }
+
+    return { error: "Error al procesar el reembolso. Intentá de nuevo." };
+  }
+}
+
 export async function removeCategoryImage(
   categoryId: string,
 ): Promise<{ success: true } | { error: string }> {

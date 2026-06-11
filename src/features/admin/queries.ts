@@ -167,6 +167,84 @@ export async function getAdminBrands() {
   });
 }
 
+// ── Orders List (paginated, filterable) ──────────────────────────────────────
+
+export interface GetAdminOrdersParams {
+  page?: number;
+  status?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  search?: string;
+  limit?: number;
+}
+
+export async function getAdminOrdersList(
+  params: GetAdminOrdersParams = {},
+) {
+  const {
+    page = 1,
+    status,
+    dateFrom,
+    dateTo,
+    search,
+    limit = 20,
+  } = params;
+
+  const where: Prisma.OrderWhereInput = {};
+
+  // Status filter
+  if (
+    status &&
+    ["PENDING", "PAID", "CANCELLED", "REFUNDED"].includes(status)
+  ) {
+    where.status = status as "PENDING" | "PAID" | "CANCELLED" | "REFUNDED";
+  }
+
+  // Date range filter
+  if (dateFrom || dateTo) {
+    where.createdAt = {};
+    if (dateFrom) {
+      where.createdAt.gte = new Date(dateFrom);
+    }
+    if (dateTo) {
+      // End of the selected day
+      const endDate = new Date(dateTo);
+      endDate.setHours(23, 59, 59, 999);
+      where.createdAt.lte = endDate;
+    }
+  }
+
+  // Search by orderNumber or customerEmail
+  if (search && search.trim().length > 0) {
+    const trimmedSearch = search.trim();
+    where.OR = [
+      { orderNumber: { contains: trimmedSearch, mode: "insensitive" } },
+      { customerEmail: { contains: trimmedSearch, mode: "insensitive" } },
+    ];
+  }
+
+  const [orders, totalCount] = await Promise.all([
+    db.order.findMany({
+      where,
+      include: {
+        payment: { select: { status: true, provider: true } },
+        _count: { select: { items: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    db.order.count({ where }),
+  ]);
+
+  return {
+    orders,
+    totalPages: Math.max(1, Math.ceil(totalCount / limit)),
+    totalCount,
+    page,
+  };
+}
+
 // ── Order Detail (for admin review) ──────────────────────────────────────────
 
 export async function getAdminOrderDetail(orderId: string) {
