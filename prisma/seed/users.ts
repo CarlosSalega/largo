@@ -8,14 +8,23 @@ import type { User } from "@/lib/db/types";
 export async function seedUsers(prisma: PrismaClient): Promise<User> {
   const adminEmail = "admin@largo.com";
 
-  const adminUser = await prisma.user.upsert({
+  const existing = await prisma.user.findUnique({
     where: { email: adminEmail },
-    update: {},
-    create: {
+  });
+
+  if (existing) {
+    console.log(
+      `✅ Admin user already exists: ${existing.email} (role: ${existing.role})`,
+    );
+    return existing;
+  }
+
+  const adminUser = await prisma.user.create({
+    data: {
       email: adminEmail,
       name: "Admin",
+      emailVerified: false,
       role: "ADMIN",
-      image: null,
     },
   });
 
