@@ -38,7 +38,6 @@ export function CheckoutForm() {
   const items = useCartStore((s) => s.items);
 
   const methods = useForm<CheckoutFormData>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(checkoutSchema) as unknown as Resolver<CheckoutFormData>,
     defaultValues: {
       name: "",
