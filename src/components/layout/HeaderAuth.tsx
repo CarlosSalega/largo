@@ -11,9 +11,10 @@ import { signOutAction } from "@/features/customers/actions";
 
 interface HeaderAuthProps {
   authenticated: boolean;
+  role?: string;
 }
 
-export function HeaderAuth({ authenticated }: HeaderAuthProps) {
+export function HeaderAuth({ authenticated, role }: HeaderAuthProps) {
   const router = useRouter();
 
   if (!authenticated) {
@@ -35,16 +36,24 @@ export function HeaderAuth({ authenticated }: HeaderAuthProps) {
 
   return (
     <>
+      {role === "ADMIN" && (
+        <Link
+          href="/admin"
+          className="text-sm text-card-foreground transition-colors hover:text-card-foreground"
+        >
+          Admin
+        </Link>
+      )}
       <Link
         href="/account"
-        className="text-sm text-slate-300 transition-colors hover:text-white"
+        className="text-sm text-card-foreground transition-colors hover:text-card-foreground"
       >
         Mi cuenta
       </Link>
       <form action={handleSignOut}>
         <button
           type="submit"
-          className="text-sm text-slate-400 transition-colors hover:text-white"
+          className="text-sm text-muted-foreground transition-colors hover:text-card-foreground"
         >
           Salir
         </button>
