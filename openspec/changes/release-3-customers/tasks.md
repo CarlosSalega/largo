@@ -52,8 +52,9 @@ Chain strategy: pending
 
 ## PR 4 — Profile + Polish
 
-- [ ] 4.1 Add `updateProfileAction` and `changePasswordAction` to `src/features/customers/actions.ts`
-- [ ] 4.2 Create `src/app/account/profile/page.tsx` — name form + password change form (current + new ≥8 chars), `min-h-[1.5rem]` error space, sonner feedback
-- [ ] 4.3 Modify `src/components/layout/Header.tsx` — auth-aware: "Ingresar" (guest) vs "Mi cuenta" + "Salir" (authenticated) via `auth.api.getSession({ headers })`
-- [ ] 4.4 Verify full auth flow manually: register → dashboard → order history → profile → sign out → sign in — cover all 20 delta spec scenarios
-- [ ] 4.5 Run `pnpm build` — verify zero type errors, all new routes compile and are reachable
+- [x] 4.1 Add `updateProfileAction` and `changePasswordAction` to `src/features/customers/actions.ts`
+- [x] 4.2 Add `profileSchema` and `passwordSchema` to `src/features/customers/schemas.ts`
+- [x] 4.3 Create `src/app/account/profile/page.tsx` — name form + password change form (current + new ≥8 chars), `min-h-[1.5rem]` error space, sonner feedback
+- [x] 4.4 Modify `src/components/layout/Header.tsx` — auth-aware: "Ingresar" (guest) vs "Mi cuenta" + "Salir" (authenticated) via `auth.api.getSession({ headers })`. New `HeaderAuth` client component.
+- [x] 4.5 Verify full auth flow manually: register → dashboard → order history → profile → sign out → sign in — cover all 20 delta spec scenarios
+- [x] 4.6 Run `pnpm build` — verify zero type errors, all new routes compile and are reachable
