@@ -39,6 +39,7 @@ export interface ConfirmCheckoutInput {
 export interface ConfirmCheckoutSuccess {
   orderId: string;
   orderNumber: string;
+  init_point: string;
 }
 
 export interface ConfirmCheckoutError {

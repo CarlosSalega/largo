@@ -11,6 +11,7 @@ import type {
   ConfirmCheckoutInput,
   ConfirmCheckoutResult,
 } from "./types";
+import { createPreference } from "@/features/payments/mercadopago";
 
 // ---- generateOrderNumber ---------------------------------------------------
 
@@ -43,7 +44,8 @@ async function releaseExpiredStock(tx: Prisma.TransactionClient): Promise<void> 
 // ---- confirmCheckout -------------------------------------------------------
 
 /**
- * Create an order atomically with stock validation.
+ * Create an order atomically with stock validation, then redirect to
+ * MercadoPago Checkout Pro.
  *
  * Steps inside prisma.$transaction:
  * 1. Validate stock for every product
@@ -55,6 +57,8 @@ async function releaseExpiredStock(tx: Prisma.TransactionClient): Promise<void> 
  * 7. UPDATE Product.stock -= quantity (WHERE stock >= quantity)
  * 8. Return { orderId, orderNumber }
  *
+ * After the transaction: calls createPreference → MercadoPago API.
+ * On success returns { orderId, orderNumber, init_point } for client redirect.
  * Cart clearing is handled client-side on success.
  */
 export async function confirmCheckout(
@@ -206,8 +210,26 @@ export async function confirmCheckout(
         };
       });
 
-      // Transaction succeeded — return result
-      return result;
+      // Transaction succeeded — now create MP preference
+      const currency = cartItems[0].currency;
+      const preference = await createPreference({
+        orderId: result.orderId,
+        orderNumber: result.orderNumber,
+        cartItems,
+        currency,
+      });
+
+      if (preference.error) {
+        // Order is persisted but preference creation failed.
+        // Visitor sees an error message — can retry from checkout.
+        return { error: preference.error };
+      }
+
+      return {
+        orderId: result.orderId,
+        orderNumber: result.orderNumber,
+        init_point: preference.init_point!,
+      };
 
     } catch (error) {
       // StockError: propagate as user-facing error

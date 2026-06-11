@@ -26,6 +26,7 @@
     "clsx": "2.1.1",
     "date-fns": "4.3.0",
     "lucide-react": "1.17.0",
+    "mercadopago": "3.1.0",
     "nanoid": "5.1.4",
     "next": "16.2.7",
     "radix-ui": "1.5.0",
