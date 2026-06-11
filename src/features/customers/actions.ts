@@ -5,7 +5,6 @@
 // ---------------------------------------------------------------------------
 
 import { auth } from "@/lib/auth/config";
-import { redirect } from "next/navigation";
 import type {
   SignInInput,
   SignUpInput,
@@ -84,11 +83,11 @@ export async function signOutAction() {
     await auth.api.signOut({
       headers: await headers(),
     });
+
+    return { success: true as const };
   } catch {
     return { error: "Error al cerrar sesión" };
   }
-
-  redirect("/");
 }
 
 // ---- updateProfileAction ----------------------------------------------------

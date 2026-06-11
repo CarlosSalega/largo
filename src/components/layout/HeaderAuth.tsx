@@ -5,7 +5,6 @@
 // Renders "Ingresar" (guest) or "Mi cuenta" + "Salir" (authenticated)
 // ---------------------------------------------------------------------------
 
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signOutAction } from "@/features/customers/actions";
 
@@ -15,8 +14,6 @@ interface HeaderAuthProps {
 }
 
 export function HeaderAuth({ authenticated, role }: HeaderAuthProps) {
-  const router = useRouter();
-
   if (!authenticated) {
     return (
       <Link
@@ -30,8 +27,7 @@ export function HeaderAuth({ authenticated, role }: HeaderAuthProps) {
 
   async function handleSignOut() {
     await signOutAction();
-    router.push("/");
-    router.refresh();
+    window.location.href = "/";
   }
 
   return (
