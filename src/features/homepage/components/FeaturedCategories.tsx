@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
+import { SafeImage } from "@/components/ui/safe-image";
 import type { Category } from "@/lib/db/types";
 
 interface FeaturedCategoriesProps {
@@ -26,21 +27,13 @@ export function FeaturedCategories({ categories }: FeaturedCategoriesProps) {
             <Link key={category.id} href={`/catalog?category=${category.slug}`}>
               <Card className="group h-full transition-shadow hover:shadow-md">
                 <CardContent className="p-0">
-                  {category.image ? (
-                    <div className="aspect-video w-full overflow-hidden rounded-t-xl bg-muted">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                  ) : (
-                    <div className="aspect-video w-full rounded-t-xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-                      <span className="text-2xl font-bold text-muted-foreground/30">
-                        {category.name.charAt(0)}
-                      </span>
-                    </div>
-                  )}
+                  <div className="aspect-video w-full overflow-hidden rounded-t-xl bg-muted">
+                    <SafeImage
+                      src={category.image}
+                      alt={category.name}
+                      className="transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
                   <div className="p-4">
                     <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                       {category.name}
