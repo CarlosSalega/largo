@@ -2,7 +2,6 @@
 // OrderDetail — server component displaying the full order
 // ---------------------------------------------------------------------------
 
-import type { Prisma } from "@prisma/client";
 import { formatPrice } from "@/lib/formatPrice";
 import { OrderStatusBadge } from "./OrderStatusBadge";
 

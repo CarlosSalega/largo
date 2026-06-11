@@ -10,6 +10,21 @@ import type { NextRequest } from "next/server";
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // ── Protect /admin/* routes — ADMIN role required ────────────────────────
+  if (pathname.startsWith("/admin")) {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      return NextResponse.redirect(new URL("/ingresar", request.url));
+    }
+
+    if (session.user.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
+
   // ── Protect /account/* routes ──────────────────────────────────────────
   if (pathname.startsWith("/account")) {
     const session = await auth.api.getSession({
@@ -36,5 +51,5 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/account/:path*", "/ingresar"],
+  matcher: ["/admin/:path*", "/account/:path*", "/ingresar"],
 };

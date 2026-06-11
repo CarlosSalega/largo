@@ -21,7 +21,10 @@ export async function Header() {
         </Link>
         <div className="flex items-center gap-2">
           <Navigation />
-          <HeaderAuth authenticated={!!session} />
+          <HeaderAuth
+            authenticated={!!session}
+            role={session?.user.role}
+          />
           <CartIcon />
         </div>
       </div>

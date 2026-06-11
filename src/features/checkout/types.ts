@@ -14,11 +14,10 @@ export interface CheckoutState {
   currentStep: CheckoutStep;
 }
 
-export interface CartItemPayload
-  extends Pick<
-    CartItem,
-    "productId" | "name" | "price" | "currency" | "quantity" | "image" | "stock"
-  > {}
+export type CartItemPayload = Pick<
+  CartItem,
+  "productId" | "name" | "price" | "currency" | "quantity" | "image" | "stock"
+>;
 
 export interface ConfirmCheckoutInput {
   customer: {

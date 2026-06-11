@@ -28,8 +28,9 @@ export function CatalogSearch() {
     [router, searchParams]
   );
 
-  // Sync with URL on navigation (back/forward)
+  // Sync input with URL on browser back/forward navigation
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setValue(searchParams.get("search") ?? "");
   }, [searchParams]);
 
@@ -48,33 +49,28 @@ export function CatalogSearch() {
 
   const handleClear = () => {
     setValue("");
-    updateSearch("");
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      updateSearch(value);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
     }
+    updateSearch("");
   };
 
   return (
     <div className="relative w-full max-w-md">
-      <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+      <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
       <input
         type="text"
         value={value}
         onChange={handleChange}
-        onKeyDown={handleKeyDown}
         placeholder="Buscar productos..."
-        className="w-full rounded-lg border border-input bg-background py-2 pl-10 pr-9 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20 transition-colors"
+        className="h-10 w-full rounded-lg border border-border bg-card pl-10 pr-10 text-sm text-card-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
       />
       {value && (
         <button
           type="button"
           onClick={handleClear}
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-sm p-0.5 text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Clear search"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-card-foreground"
+          aria-label="Limpiar búsqueda"
         >
           <X className="size-4" />
         </button>
