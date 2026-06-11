@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Navigation } from "@/components/layout/Navigation";
+import { CartIcon } from "@/features/cart/components/CartIcon";
 
 export function Header() {
   return (
@@ -11,7 +12,10 @@ export function Header() {
         >
           LARGO
         </Link>
-        <Navigation />
+        <div className="flex items-center gap-2">
+          <Navigation />
+          <CartIcon />
+        </div>
       </div>
     </header>
   );

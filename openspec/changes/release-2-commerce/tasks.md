@@ -81,7 +81,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-006: Install Zustand
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `package.json`
 **Description**: `npm install zustand@5.0.9`. Zustand already at v5 — confirm `persist` middleware API.
 **Acceptance**: `import { create } from "zustand"` resolves. `npm run build` succeeds.
@@ -90,7 +90,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-007: Create Cart types
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/features/cart/types.ts` (new)
 **Description**: Define `CartItem` (productId, name, price, currency, image, quantity, stock) and `CartState` (items, addItem, removeItem, updateQuantity, clearCart, getTotal, getItemCount, getCurrency).
 **Acceptance**: Types exports compile. `CartItem` has `currency: string` field.
@@ -99,7 +99,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-008: Create Zustand cart store with localStorage persistence
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/features/cart/store.ts` (new)
 **Description**: Create Zustand store using `create` + `persist` middleware. localStorage key: `"largo-cart"`. Actions: `addItem` (increment if exists, else push qty=1), `removeItem`, `updateQuantity` (clamp to [0, stock]), `clearCart`. Derived: `getTotal` (sum price×qty), `getItemCount` (sum qty), `getCurrency` (items[0]?.currency or null).
 **Acceptance**: Add/remove/update items in browser console. Refresh page → cart restored. New incognito → empty cart.
@@ -108,7 +108,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-009: Implement mixed-currency guard
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/features/cart/store.ts` (modify), `src/features/cart/utils.ts` (new)
 **Description**: In `addItem`, if `items.length > 0 && items[0].currency !== product.currency`, return error string. Caller (ProductStock) catches it and shows sonner toast: "Tu carrito tiene productos en {currency}. ¿Querés vaciar el carrito y agregar este producto en {newCurrency}?" with "Vaciar y agregar" action.
 **Acceptance**: Add USD product → add ARS product → toast appears → product NOT added. Click "Vaciar y agregar" → cart cleared → ARS product added.
@@ -117,7 +117,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-010: Create CartIcon component with badge
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/features/cart/components/CartIcon.tsx` (new)
 **Description**: "use client". Renders `ShoppingCart` icon from lucide-react. Badge shows `getItemCount()` from store. Badge hidden when 0. Click toggles CartDrawer open state.
 **Acceptance**: Icon visible in header. Badge shows correct count. Toggles drawer. Badge hidden when cart empty.
@@ -126,7 +126,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-011: Add CartIcon to Header
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/components/layout/Header.tsx` (modify)
 **Description**: Import CartIcon. Add it to the right side of the header, before the navigation or as a standalone element. Use flex spacing so Logo stays left, CartIcon stays right.
 **Acceptance**: CartIcon renders in header on all public pages. Click opens drawer.
@@ -135,7 +135,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-012: Create CartItem component
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/features/cart/components/CartItem.tsx` (new)
 **Description**: "use client". Displays product image (or placeholder), name, currency + unit price via `formatPrice`, quantity increment/decrement buttons, line subtotal, remove (Trash icon). Decrement below 1 removes item. Increment checks `stock` limit.
 **Acceptance**: Item rendered with correct data. +/- buttons update store. Remove button removes item.
@@ -144,7 +144,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-013: Create EmptyCart component
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/features/cart/components/EmptyCart.tsx` (new)
 **Description**: "use client". Shows shopping bag icon, "Tu carrito está vacío" message, and "Ver productos" link to `/catalog`.
 **Acceptance**: Renders when cart is empty. Link navigates to catalog.
@@ -153,7 +153,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-014: Create CartDrawer component
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/features/cart/components/CartDrawer.tsx` (new)
 **Description**: "use client". Slide-out panel from right (Sheet-like). Contains: title "Carrito", CartItem list (or EmptyCart), CartSummary (total + "Proceed to checkout" button), close button. Uses Tailwind fixed positioning + transition. Closes on overlay click or Esc key.
 **Acceptance**: Opens when CartIcon clicked. Closes on X/overlay/Esc. Shows items correctly. "Proceed to checkout" → navigates to `/checkout`.
@@ -162,7 +162,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-015: Create CartSummary component
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/features/cart/components/CartSummary.tsx` (new)
 **Description**: "use client". Shows total from `getTotal()` + `getCurrency()` via `formatPrice`. "Proceed to checkout" button (hidden when cart empty). Displays item count.
 **Acceptance**: Total matches sum of line subtotals. Currency shown correctly. Button navigates to `/checkout`.
@@ -171,7 +171,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-016: Create cart page at `/cart`
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/app/(public)/cart/page.tsx` (new)
 **Description**: "use client". Full-page cart view: header "Carrito", CartItem list or EmptyCart, CartSummary. Includes SEO metadata (title: "Carrito | Largo", description: "carrito de compras").
 **Acceptance**: `/cart` shows all cart items. Empty state with CTA. Proceed-to-checkout button works. Page title and meta correct.
@@ -180,7 +180,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-017: Wire ProductStock "Add to cart" button
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/features/product-detail/components/ProductStock.tsx` (modify)
 **Description**: Convert to "use client". Import `useCartStore`. On click, call `addItem` with product data (id, name, price, currency, first image, stock). Handle mixed-currency rejection with sonner toast. Disable button when `stock === 0`.
 **Acceptance**: Click "Add to cart" → item appears in CartDrawer. Badge updates. Click again → quantity increments. Toast on mixed-currency.
@@ -189,7 +189,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-018: Add hydration guard to cart components
 **PR**: 1
-**Status**: pending
+**Status**: completed
 **Files**: `src/features/cart/store.ts` (modify)
 **Description**: Add `hasHydrated` state set in `useEffect`. All client components (CartIcon, CartDrawer, CartItem, /cart page) render skeleton/null until `hasHydrated` to prevent SSR mismatch with localStorage.
 **Acceptance**: No hydration mismatch errors in console. Cart loads correctly on first render.
