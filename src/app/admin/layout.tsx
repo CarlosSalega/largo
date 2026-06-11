@@ -1,12 +1,13 @@
 // ---------------------------------------------------------------------------
-// Admin layout — full-screen dashboard shell with sidebar navigation
+// Admin layout — full-screen dashboard shell with collapsible sidebar navigation
 // Defense-in-depth: RSC session check (proxy.ts is the primary gate)
+// Sidebar state is client-side (SidebarToggle) — collapsed on mobile by default
 // ---------------------------------------------------------------------------
 
 import { headers } from "next/headers";
 import Link from "next/link";
 import { auth } from "@/lib/auth/config";
-import { SignOutButton } from "@/features/customers/components/SignOutButton";
+import { SidebarToggle } from "@/components/admin/SidebarToggle";
 
 export default async function AdminLayout({
   children,
@@ -40,57 +41,6 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* ---- Sidebar ---- */}
-      <aside className="flex w-64 shrink-0 flex-col border-r border-border bg-card">
-        {/* Brand */}
-        <div className="border-b border-border px-6 py-5">
-          <Link
-            href="/admin"
-            className="text-xl font-bold tracking-tight text-card-foreground transition-opacity hover:opacity-80"
-          >
-            LARGO
-          </Link>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 space-y-1 px-4 py-4">
-          <Link
-            href="/admin/products"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-card-foreground transition-colors hover:bg-muted"
-          >
-            Productos
-          </Link>
-          <Link
-            href="/admin/categories"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-card-foreground transition-colors hover:bg-muted"
-          >
-            Categorías
-          </Link>
-          <Link
-            href="/admin/orders"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-card-foreground transition-colors hover:bg-muted"
-          >
-            Órdenes
-          </Link>
-        </nav>
-
-        {/* User section */}
-        <div className="border-t border-border px-4 py-4">
-          <p className="px-3 text-sm text-muted-foreground">
-            Hola,{" "}
-            <span className="font-medium text-card-foreground">
-              {session.user.name}
-            </span>
-          </p>
-          <div className="mt-2">
-            <SignOutButton />
-          </div>
-        </div>
-      </aside>
-
-      {/* ---- Main content ---- */}
-      <main className="min-w-0 flex-1 p-6">{children}</main>
-    </div>
+    <SidebarToggle userName={session.user.name}>{children}</SidebarToggle>
   );
 }
