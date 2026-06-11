@@ -58,10 +58,12 @@ Chain strategy: feature-branch-chain
 
 ## Phase 4: Category CRUD (PR 4)
 
-- [ ] 4.1 Create `src/features/admin/categories/{schemas,queries,actions}.ts` — all guarded by `requireAdmin()`
-- [ ] 4.2 Create `src/app/admin/categories/page.tsx`: table with search, pagination, featured toggle per row
-- [ ] 4.3 Create `src/app/admin/categories/new/page.tsx` + `[id]/edit/page.tsx`: RHF+Zod + ImageUpload (maxImages=1); edit replaces old image
-- [ ] 4.4 Verify `pnpm build` + `pnpm lint`
+- [x] 4.1 Create `src/features/admin/categories/{schemas,queries,actions}.ts` — all guarded by `requireAdmin()`
+  > ✏️ Added to existing flat files: `schemas.ts` (active field), `queries.ts` (getAdminCategoriesList + getAdminCategoryById), `actions.ts` (6 category actions + uniqueCategorySlug helper).
+- [x] 4.2 Create `src/app/admin/categories/page.tsx`: table with search, pagination, featured toggle per row
+- [x] 4.3 Create `src/app/admin/categories/new/page.tsx` + `[id]/edit/page.tsx`: RHF+Zod + ImageUpload (maxImages=1); edit replaces old image
+  > ✏️ Also created `CategoryForm.tsx` (shared RHF+Zod form) and `CategoryRowActions.tsx` (client toggle/archive component). Edit page uses server component + client wrapper pattern.
+- [x] 4.4 Verify `pnpm build` + `pnpm lint`
 
 ## Phase 5: Order Management (PR 5)
 
