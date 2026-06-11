@@ -45,10 +45,10 @@ Chain strategy: pending
 
 ## PR 3 — Customer Dashboard
 
-- [ ] 3.1 Create `src/features/customers/queries.ts` — `getCustomerOrders(userId)` most-recent-first, `getCustomerOrderByNumber(userId, orderNumber)` via Prisma
-- [ ] 3.2 Create `src/app/account/layout.tsx` — dashboard layout with sidebar nav (Orders, Profile) and sign-out button
-- [ ] 3.3 Create `src/app/account/orders/page.tsx` — server component: fetch orders via `auth.api.getSession({ headers })`, list or "Todavía no hiciste ningún pedido" empty state
-- [ ] 3.4 Create `src/app/account/orders/[orderNumber]/page.tsx` — order detail page: items, shipping, payment status; "Pedido no encontrado" for missing orders
+- [x] 3.1 Create `src/features/customers/queries.ts` — `getCustomerOrders(userId)` most-recent-first, `getCustomerOrderByNumber(userId, orderNumber)` via Prisma
+- [x] 3.2 Create `src/app/account/layout.tsx` — dashboard layout with sidebar nav (Orders, Profile) and sign-out button
+- [x] 3.3 Create `src/app/account/orders/page.tsx` — server component: fetch orders via `auth.api.getSession({ headers })`, list or "Todavía no hiciste ningún pedido" empty state
+- [x] 3.4 Create `src/app/account/orders/[orderNumber]/page.tsx` — order detail page: items, shipping, payment status; "Pedido no encontrado" for missing orders
 
 ## PR 4 — Profile + Polish
 
