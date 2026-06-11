@@ -48,8 +48,10 @@ export default function IngresarPage() {
 
       if (result.error) {
         toast.error(result.error);
+      } else {
+        toast.success("¡Bienvenido!");
+        window.location.href = "/account";
       }
-      // Success → Server Action handles redirect via next/navigation
     } catch {
       toast.error("Error de conexión. Intentá de nuevo.");
     } finally {

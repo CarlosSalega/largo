@@ -45,7 +45,7 @@ export async function signUpAction(data: SignUpInput) {
     return { error: "Error al crear la cuenta. Intentá de nuevo." };
   }
 
-  redirect("/account");
+  return { success: true as const };
 }
 
 // ---- signInAction -----------------------------------------------------------
@@ -73,7 +73,7 @@ export async function signInAction(data: SignInInput) {
     return { error: "Error al iniciar sesión. Intentá de nuevo." };
   }
 
-  redirect("/account");
+  return { success: true as const };
 }
 
 // ---- signOutAction ----------------------------------------------------------
