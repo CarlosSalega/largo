@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Brand } from "@/lib/db/types";
 
 interface FeaturedBrandsProps {
@@ -28,10 +29,13 @@ export function FeaturedBrands({ brands }: FeaturedBrandsProps) {
               className="group flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground"
             >
               {brand.logo ? (
-                <img
+                <Image
                   src={brand.logo}
                   alt={brand.name}
+                  width={120}
+                  height={32}
                   className="h-8 w-auto opacity-60 transition-opacity group-hover:opacity-100"
+                  unoptimized
                 />
               ) : (
                 <span className="text-xl font-bold tracking-tight">

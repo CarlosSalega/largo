@@ -63,3 +63,4 @@ Thumbs.db
 .atl/
 .claude/
 .opencode/
+package-lock.json
