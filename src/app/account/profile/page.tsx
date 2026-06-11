@@ -90,19 +90,19 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-lg space-y-10">
-      <h1 className="text-2xl font-bold text-white">Perfil</h1>
+      <h1 className="text-2xl font-bold text-card-foreground">Perfil</h1>
 
       {/* ================================================================= */}
       {/* Name section                                                      */}
       {/* ================================================================= */}
       <section>
-        <h2 className="mb-4 text-lg font-semibold text-white">Nombre</h2>
+        <h2 className="mb-4 text-lg font-semibold text-card-foreground">Nombre</h2>
 
         <form onSubmit={handleNameSubmit(onNameSubmit)} className="space-y-4">
           <div>
             <label
               htmlFor="profile-name"
-              className="mb-1 block text-sm font-medium text-slate-300"
+              className="mb-1 block text-sm font-medium text-card-foreground"
             >
               Tu nombre
             </label>
@@ -112,9 +112,9 @@ export default function ProfilePage() {
               placeholder="Tu nombre completo"
               disabled={isPending}
               {...registerName("name")}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-2.5 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none disabled:opacity-50"
+              className="w-full rounded-lg border border-input bg-muted px-4 py-2.5 text-card-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none disabled:opacity-50"
             />
-            <p className="min-h-[1.5rem] text-sm text-red-400">
+            <p className="min-h-[1.5rem] text-sm text-destructive">
               {nameErrors.name?.message ?? "\u00A0"}
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function ProfilePage() {
           <button
             type="submit"
             disabled={namePending || isPending}
-            className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-card-foreground transition-colors hover:bg-primary/80 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {namePending ? "Guardando..." : "Guardar cambios"}
           </button>
@@ -133,7 +133,7 @@ export default function ProfilePage() {
       {/* Password section                                                  */}
       {/* ================================================================= */}
       <section>
-        <h2 className="mb-4 text-lg font-semibold text-white">
+        <h2 className="mb-4 text-lg font-semibold text-card-foreground">
           Cambiar contraseña
         </h2>
 
@@ -145,7 +145,7 @@ export default function ProfilePage() {
           <div>
             <label
               htmlFor="profile-current-password"
-              className="mb-1 block text-sm font-medium text-slate-300"
+              className="mb-1 block text-sm font-medium text-card-foreground"
             >
               Contraseña actual
             </label>
@@ -155,9 +155,9 @@ export default function ProfilePage() {
               placeholder="Tu contraseña actual"
               autoComplete="current-password"
               {...registerPassword("currentPassword")}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-2.5 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-input bg-muted px-4 py-2.5 text-card-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none"
             />
-            <p className="min-h-[1.5rem] text-sm text-red-400">
+            <p className="min-h-[1.5rem] text-sm text-destructive">
               {passwordErrors.currentPassword?.message ?? "\u00A0"}
             </p>
           </div>
@@ -166,7 +166,7 @@ export default function ProfilePage() {
           <div>
             <label
               htmlFor="profile-new-password"
-              className="mb-1 block text-sm font-medium text-slate-300"
+              className="mb-1 block text-sm font-medium text-card-foreground"
             >
               Nueva contraseña
             </label>
@@ -176,9 +176,9 @@ export default function ProfilePage() {
               placeholder="Mínimo 8 caracteres"
               autoComplete="new-password"
               {...registerPassword("newPassword")}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-2.5 text-white placeholder:text-slate-500 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-input bg-muted px-4 py-2.5 text-card-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none"
             />
-            <p className="min-h-[1.5rem] text-sm text-red-400">
+            <p className="min-h-[1.5rem] text-sm text-destructive">
               {passwordErrors.newPassword?.message ?? "\u00A0"}
             </p>
           </div>
@@ -186,7 +186,7 @@ export default function ProfilePage() {
           <button
             type="submit"
             disabled={passwordPending}
-            className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-card-foreground transition-colors hover:bg-primary/80 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {passwordPending ? "Guardando..." : "Cambiar contraseña"}
           </button>

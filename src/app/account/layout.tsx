@@ -25,13 +25,13 @@ export default async function AccountLayout({
         <Header />
         <main className="flex flex-1 items-center justify-center">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-white">No autorizado</h1>
-            <p className="mt-2 text-slate-400">
+            <h1 className="text-2xl font-bold text-card-foreground">No autorizado</h1>
+            <p className="mt-2 text-muted-foreground">
               Iniciá sesión para acceder a tu cuenta.
             </p>
             <Link
               href="/ingresar"
-              className="mt-4 inline-block text-sm text-blue-400 transition-colors hover:text-blue-300"
+              className="mt-4 inline-block text-sm text-primary transition-colors hover:text-primary/80"
             >
               Ir a Ingresar
             </Link>
@@ -47,11 +47,11 @@ export default async function AccountLayout({
       <Header />
       <div className="flex flex-1">
         {/* ---- Sidebar ---- */}
-        <aside className="w-64 shrink-0 border-r border-slate-800 bg-slate-900/50 p-6">
+        <aside className="w-64 shrink-0 border-r border-border bg-card p-6">
           {/* User greeting */}
           <div className="mb-8">
-            <p className="text-sm text-slate-400">Hola,</p>
-            <p className="text-lg font-semibold text-white">
+            <p className="text-sm text-muted-foreground">Hola,</p>
+            <p className="text-lg font-semibold text-card-foreground">
               {session.user.name}
             </p>
           </div>
@@ -60,13 +60,13 @@ export default async function AccountLayout({
           <nav className="space-y-1">
             <Link
               href="/account/orders"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-card-foreground transition-colors hover:bg-muted hover:text-card-foreground"
             >
               Mis órdenes
             </Link>
             <Link
               href="/account/profile"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-card-foreground transition-colors hover:bg-muted hover:text-card-foreground"
             >
               Perfil
             </Link>

@@ -45,13 +45,13 @@ export default async function AccountOrderDetailPage({
   if (!session) {
     return (
       <div className="py-16 text-center">
-        <h2 className="text-xl font-bold text-white">No autorizado</h2>
-        <p className="mt-2 text-slate-400">
+        <h2 className="text-xl font-bold text-card-foreground">No autorizado</h2>
+        <p className="mt-2 text-muted-foreground">
           Iniciá sesión para ver el detalle del pedido.
         </p>
         <Link
           href="/ingresar"
-          className="mt-4 inline-block text-sm text-blue-400 transition-colors hover:text-blue-300"
+          className="mt-4 inline-block text-sm text-primary transition-colors hover:text-primary/80"
         >
           Ir a Ingresar
         </Link>
@@ -75,7 +75,7 @@ export default async function AccountOrderDetailPage({
       <div className="mx-auto max-w-2xl pt-4 text-center">
         <Link
           href="/account/orders"
-          className="text-sm text-slate-400 transition-colors hover:text-white"
+          className="text-sm text-muted-foreground transition-colors hover:text-card-foreground"
         >
           ← Volver a mis órdenes
         </Link>

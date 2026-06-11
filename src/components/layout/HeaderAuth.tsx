@@ -21,7 +21,7 @@ export function HeaderAuth({ authenticated, role }: HeaderAuthProps) {
     return (
       <Link
         href="/ingresar"
-        className="text-sm text-slate-300 transition-colors hover:text-white"
+        className="text-sm text-card-foreground transition-colors hover:text-card-foreground"
       >
         Ingresar
       </Link>
