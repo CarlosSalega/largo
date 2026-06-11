@@ -31,9 +31,9 @@ export function ProductCard({ product }: ProductCardProps) {
             {/* Stock badge */}
             {!inStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-background/60 backdrop-blur-[2px]">
-                <span className="rounded-full bg-destructive/90 px-3 py-1 text-xs font-semibold text-white">
-                  Out of stock
-                </span>
+                  <span className="rounded-full bg-destructive/90 px-3 py-1 text-xs font-semibold text-white">
+                    Sin stock
+                  </span>
               </div>
             )}
           </div>
@@ -51,9 +51,9 @@ export function ProductCard({ product }: ProductCardProps) {
                 {formatPrice(product.price, product.currency)}
               </p>
               {inStock && (
-                <span className="text-xs font-medium text-emerald-600">
-                  In stock
-                </span>
+                  <span className="text-xs font-medium text-emerald-600">
+                    En stock
+                  </span>
               )}
             </div>
           </div>

@@ -13,11 +13,11 @@ export function FeaturedBrands({ brands }: FeaturedBrandsProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Top Brands
+            Las mejores marcas
           </h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            We partner with the world&apos;s most trusted technology brands to
-            bring you the best products.
+            Trabajamos con las marcas de tecnología más confiables del mundo para
+            traerte los mejores productos.
           </p>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">

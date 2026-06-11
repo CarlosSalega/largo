@@ -21,11 +21,11 @@ export function FeaturedProducts({ products }: FeaturedProductsProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Featured Products
+            Productos destacados
           </h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Hand-picked products we think you&apos;ll love. Quality and
-            performance guaranteed.
+            Productos seleccionados que sabemos que te van a encantar. Calidad y
+            rendimiento garantizados.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

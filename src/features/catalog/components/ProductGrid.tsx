@@ -25,11 +25,11 @@ export function ProductGrid({ products }: ProductGridProps) {
           </svg>
         </div>
         <h3 className="text-lg font-semibold text-foreground">
-          No products found
+          No se encontraron productos
         </h3>
         <p className="mt-1 text-sm text-muted-foreground max-w-md">
-          Try adjusting your search or filters to find what you&apos;re looking
-          for.
+          Probá ajustando los filtros o la búsqueda para encontrar lo que
+          estás buscando.
         </p>
       </div>
     );

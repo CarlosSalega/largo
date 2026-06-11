@@ -11,21 +11,21 @@ export function Footer() {
               LARGO
             </Link>
             <p className="mt-3 text-sm text-muted-foreground max-w-xs">
-              Your trusted technology store. Premium products from the world's
-              leading brands.
+              Tu tienda de tecnología de confianza. Productos premium de las
+              marcas líderes a nivel mundial.
             </p>
           </div>
 
           {/* Shop */}
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Shop</h3>
+            <h3 className="text-sm font-semibold text-foreground">Tienda</h3>
             <ul className="mt-3 space-y-2">
               <li>
                 <Link
                   href="/catalog"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  All Products
+                  Todos los productos
                 </Link>
               </li>
               <li>
@@ -33,7 +33,7 @@ export function Footer() {
                   href="/catalog"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Categories
+                  Categorías
                 </Link>
               </li>
               <li>
@@ -41,7 +41,7 @@ export function Footer() {
                   href="/catalog"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Brands
+                  Marcas
                 </Link>
               </li>
             </ul>
@@ -49,14 +49,14 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Company</h3>
+            <h3 className="text-sm font-semibold text-foreground">Empresa</h3>
             <ul className="mt-3 space-y-2">
               <li>
                 <Link
                   href="/"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  About Us
+                  Sobre nosotros
                 </Link>
               </li>
               <li>
@@ -64,7 +64,7 @@ export function Footer() {
                   href="/"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Contact
+                  Contacto
                 </Link>
               </li>
               <li>
@@ -72,7 +72,7 @@ export function Footer() {
                   href="/"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Privacy Policy
+                  Política de privacidad
                 </Link>
               </li>
             </ul>
@@ -80,16 +80,16 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Contact</h3>
+            <h3 className="text-sm font-semibold text-foreground">Contacto</h3>
             <ul className="mt-3 space-y-2">
               <li className="text-sm text-muted-foreground">
                 hello@largo.com
               </li>
               <li className="text-sm text-muted-foreground">
-                +1 (555) 123-4567
+                +54 11 1234-5678
               </li>
               <li className="text-sm text-muted-foreground">
-                Mon-Fri 9am-6pm EST
+                Lun-Vie 9am-6pm
               </li>
             </ul>
           </div>
@@ -97,7 +97,7 @@ export function Footer() {
 
         <div className="mt-10 border-t pt-6">
           <p className="text-center text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Largo. All rights reserved.
+            &copy; {new Date().getFullYear()} Largo. Todos los derechos reservados.
           </p>
         </div>
       </div>

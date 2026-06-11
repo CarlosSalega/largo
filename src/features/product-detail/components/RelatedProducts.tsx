@@ -13,10 +13,10 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
       <div className="section-container">
         <div className="mb-10">
           <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            Related products
+            Productos relacionados
           </h2>
           <p className="mt-2 text-muted-foreground">
-            You might also like these
+            También te puede interesar
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
