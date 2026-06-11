@@ -7,7 +7,6 @@
 import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useCartStore } from "@/features/cart/store";
 import { checkoutSchema } from "../schemas";
 import { CustomerStep } from "./CustomerStep";
@@ -35,7 +34,6 @@ export function CheckoutForm() {
   const [currentStep, setCurrentStep] = useState<CheckoutStep>("customer");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const router = useRouter();
   const clearCart = useCartStore((s) => s.clearCart);
   const items = useCartStore((s) => s.items);
 
@@ -97,9 +95,9 @@ export function CheckoutForm() {
         return;
       }
 
-      // Success: clear cart and redirect
+      // Success: clear cart and redirect to MercadoPago hosted checkout
       clearCart();
-      router.push(`/checkout/success?orderNumber=${result.orderNumber}`);
+      window.location.href = result.init_point;
     } catch {
       setErrorMessage(
         "Ocurrió un error al procesar tu pedido. Intentá de nuevo."

@@ -332,7 +332,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-033: Install MercadoPago SDK
 **PR**: 3
-**Status**: pending
+**Status**: done
 **Files**: `package.json`
 **Description**: `npm install mercadopago@2.4.1`
 **Acceptance**: `import { MercadoPagoConfig, Preference, Payment } from "mercadopago"` resolves.
@@ -341,7 +341,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-034: Create MercadoPago client singleton
 **PR**: 3
-**Status**: pending
+**Status**: done
 **Files**: `src/lib/mercadopago/client.ts` (new)
 **Description**: Initialize `MercadoPagoConfig` with `accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN!`. Export singleton `mpClient`.
 **Acceptance**: Import works. Config instance created. Token read from env.
@@ -350,7 +350,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-035: Implement `createPreference`
 **PR**: 3
-**Status**: pending
+**Status**: done
 **Files**: `src/features/payments/mercadopago.ts` (new)
 **Description**: Export `createPreference(order, cartItems, currency)`. Uses `new Preference(mpClient).create({ body: { items: cartItems mapped to MP format, metadata: { orderId, orderNumber }, back_urls: { success, failure, pending }, auto_return: "approved", expires: true, expiration_date_to: now + 30min } })`. `Payment.currency` overridden with cart currency. On success: update `Payment.providerPreferenceId` in DB, return `{ init_point }`. On failure: return `{ error }`.
 **Acceptance**: With valid test token, preference created → `init_point` returned. Metadata stored. `providerPreferenceId` saved.
@@ -359,7 +359,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-036: Implement `getPayment` from MP API
 **PR**: 3
-**Status**: pending
+**Status**: done
 **Files**: `src/features/payments/mercadopago.ts` (modify)
 **Description**: Export `getMPPayment(paymentId)`. Uses `new Payment(mpClient).get({ id: paymentId })`. Returns MP payment response with `status` field.
 **Acceptance**: With valid payment ID, returns MP payment object.
@@ -368,7 +368,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-037: Integrate `createPreference` into checkout flow
 **PR**: 3
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/actions.ts` (modify), `src/app/(public)/checkout/page.tsx` (modify)
 **Description**: After `confirmCheckout` transaction succeeds, call `createPreference`. Return `{ init_point, orderNumber }` to client. Client-side: `window.location.href = init_point` for MP redirect.
 **Acceptance**: Click "Confirmar pedido" → redirected to MercadoPago hosted checkout. Items visible in MP.
@@ -377,7 +377,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-038: Implement webhook signature validation
 **PR**: 3
-**Status**: pending
+**Status**: done
 **Files**: `src/features/payments/utils.ts` (new)
 **Description**: Export `validateSignature(body, xSignature, xRequestId, secret)`. Computes HMAC-SHA256: `crypto.createHmac("sha256", secret).update("id:{data.id};request-id:{x-request-id}").digest("hex")`. Compares with provided signature.
 **Acceptance**: Valid signature → returns true. Invalid → returns false. Tampered body → mismatch.
@@ -386,7 +386,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-039: Create webhook route handler
 **PR**: 3
-**Status**: pending
+**Status**: done
 **Files**: `src/app/api/webhooks/mercadopago/route.ts` (new)
 **Description**: `POST` handler with `runtime = "nodejs"`. Flow: (1) Read headers (`x-signature`, `x-request-id`). (2) Validate signature → 401 if invalid. (3) Parse body → extract `eventId`, `data.id` (payment ID). (4) Idempotency: `prisma.webhookEvent.create({ data: { eventId, type, payload } })` → catch `P2002` → return 200. (5) Call `getMPPayment(data.id)`. (6) Find Payment by `providerPreferenceId` (MP payment has `order.id` in metadata or match by payment ID). (7) Map status: `approved` → Order→PAID, Payment→APPROVED, Payment.paidAt=now(); `rejected`/`cancelled` → Order→CANCELLED, Payment→REJECTED, release stock. (8) Mark `WebhookEvent.processed = true`. (9) Return 200.
 **Acceptance**: Simulated webhook POST → 200. Duplicate eventId → 200 idempotent. Bad signature → 401. Unknown payment → 404.
@@ -395,7 +395,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-040: Implement stock release on cancellation
 **PR**: 3
-**Status**: pending
+**Status**: done
 **Files**: `src/features/orders/queries.ts` (new)
 **Description**: Export `releaseStock(orderId)`. Within `prisma.$transaction`: `UPDATE Product SET stock = stock + oi.quantity FROM OrderItem oi WHERE oi.orderId = orderId AND oi.productId = Product.id`. Called from webhook on rejected/cancelled payment.
 **Acceptance**: Cancelled order → stock restored. Called once → stock incremented correctly.
