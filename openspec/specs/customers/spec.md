@@ -141,3 +141,16 @@ The system SHALL allow customers to change their password from `/account/profile
 - GIVEN a customer is authenticated
 - WHEN the customer provides an incorrect current password
 - THEN the change is rejected with "Contraseña actual incorrecta"
+
+### REQ-CUST-13: requireAdmin() Utility
+El sistema SHALL proveer un helper `requireAdmin()` exportado desde `src/lib/auth/utils.ts` para reutilizar la verificación de rol ADMIN en Server Components y Server Actions.
+
+#### Scenario: Admin autorizado
+- GIVEN una sesión con rol ADMIN
+- WHEN `requireAdmin()` es invocada
+- THEN retorna `{ id, name }` del usuario
+
+#### Scenario: Rol no autorizado
+- GIVEN una sesión con rol CUSTOMER o sin sesión
+- WHEN `requireAdmin()` es invocada
+- THEN redirige a `/ingresar`
