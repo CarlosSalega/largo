@@ -109,6 +109,54 @@ export async function getAdminCategories() {
   });
 }
 
+// ── Category List (paginated, searchable) ────────────────────────────────────
+
+export interface GetAdminCategoriesParams {
+  page?: number;
+  search?: string;
+  limit?: number;
+}
+
+export async function getAdminCategoriesList(
+  params: GetAdminCategoriesParams = {},
+) {
+  const { page = 1, search, limit = 20 } = params;
+
+  const where: Prisma.CategoryWhereInput = {};
+
+  if (search && search.trim().length > 0) {
+    where.name = { contains: search.trim(), mode: "insensitive" };
+  }
+
+  const [categories, totalCount] = await Promise.all([
+    db.category.findMany({
+      where,
+      include: {
+        _count: { select: { products: true } },
+      },
+      orderBy: { name: "asc" },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    db.category.count({ where }),
+  ]);
+
+  return {
+    categories,
+    totalPages: Math.max(1, Math.ceil(totalCount / limit)),
+    totalCount,
+    page,
+  };
+}
+
+// ── Single Category (for edit page) ──────────────────────────────────────────
+
+export async function getAdminCategoryById(id: string) {
+  return db.category.findUnique({
+    where: { id },
+  });
+}
+
 // ── All Active Brands (for BrandCombobox) ────────────────────────────────────
 
 export async function getAdminBrands() {

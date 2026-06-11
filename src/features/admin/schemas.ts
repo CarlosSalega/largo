@@ -33,6 +33,7 @@ export const categoryFormSchema = z.object({
   name: z.string().min(1, { error: "Ingresá el nombre de la categoría" }),
   description: z.string().optional().default(""),
   featured: z.boolean().default(false),
+  active: z.boolean().default(true),
   image: z.string().optional().default(""),
 });
 

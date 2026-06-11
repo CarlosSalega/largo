@@ -11,8 +11,8 @@ import slugifyLib from "slugify";
 import db from "@/lib/db/client";
 import { requireAdmin } from "@/lib/auth/utils";
 import { cloudinary } from "@/lib/cloudinary/config";
-import { productFormSchema } from "@/features/admin/schemas";
-import type { ProductFormInput } from "@/features/admin/schemas";
+import { productFormSchema, categoryFormSchema } from "@/features/admin/schemas";
+import type { ProductFormInput, CategoryFormInput } from "@/features/admin/schemas";
 import type { Prisma } from "@prisma/client";
 
 // ── Slug Helpers ─────────────────────────────────────────────────────────────
@@ -80,6 +80,43 @@ async function uniqueBrandSlug(name: string): Promise<string> {
   while (
     await db.brand.findUnique({
       where: { slug: candidate },
+      select: { id: true },
+    })
+  ) {
+    suffix++;
+    candidate = `${base}-${suffix}`;
+  }
+
+  return candidate;
+}
+
+/**
+ * Generate a unique slug for a category.
+ */
+async function uniqueCategorySlug(
+  name: string,
+  excludeId?: string,
+): Promise<string> {
+  const base = generateSlug(name);
+
+  const existing = await db.category.findFirst({
+    where: {
+      slug: base,
+      ...(excludeId ? { id: { not: excludeId } } : {}),
+    },
+    select: { id: true },
+  });
+
+  if (!existing) return base;
+
+  let suffix = 1;
+  let candidate = `${base}-${suffix}`;
+  while (
+    await db.category.findFirst({
+      where: {
+        slug: candidate,
+        ...(excludeId ? { id: { not: excludeId } } : {}),
+      },
       select: { id: true },
     })
   ) {
@@ -425,5 +462,218 @@ export async function createBrandInline(
     }
 
     return { error: "Error al crear la marca. Intentá de nuevo." };
+  }
+}
+
+// ── Category Actions ─────────────────────────────────────────────────────────
+
+export async function createCategory(
+  data: CategoryFormInput,
+): Promise<{ success: true; categoryId: string } | { error: string }> {
+  try {
+    await requireAdmin();
+
+    const parsed = categoryFormSchema.safeParse(data);
+    if (!parsed.success) {
+      return { error: "Datos inválidos. Revisá el formulario." };
+    }
+
+    const { image, ...categoryData } = parsed.data;
+    const slug = await uniqueCategorySlug(categoryData.name);
+
+    const category = await db.category.create({
+      data: {
+        ...categoryData,
+        slug,
+        ...(image ? { image } : {}),
+      },
+    });
+
+    revalidatePath("/admin/categories");
+
+    return { success: true, categoryId: category.id };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message.toLowerCase() : String(err);
+
+    if (message.includes("unique") || message.includes("duplicate")) {
+      return { error: "Ya existe una categoría con ese nombre." };
+    }
+
+    return { error: "Error al crear la categoría. Intentá de nuevo." };
+  }
+}
+
+export async function updateCategory(
+  id: string,
+  data: CategoryFormInput,
+): Promise<{ success: true } | { error: string }> {
+  try {
+    await requireAdmin();
+
+    const parsed = categoryFormSchema.safeParse(data);
+    if (!parsed.success) {
+      return { error: "Datos inválidos. Revisá el formulario." };
+    }
+
+    const { image, ...categoryData } = parsed.data;
+
+    // Check if category exists
+    const existing = await db.category.findUnique({
+      where: { id },
+      select: { id: true, name: true },
+    });
+
+    if (!existing) {
+      return { error: "Categoría no encontrada." };
+    }
+
+    // Regenerate slug only if name changed
+    const slug =
+      existing.name !== categoryData.name
+        ? await uniqueCategorySlug(categoryData.name, id)
+        : undefined;
+
+    await db.category.update({
+      where: { id },
+      data: {
+        ...categoryData,
+        ...(slug ? { slug } : {}),
+        ...(image !== undefined ? { image: image || null } : {}),
+      },
+    });
+
+    revalidatePath("/admin/categories");
+    revalidatePath(`/admin/categories/${id}/edit`);
+
+    return { success: true };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message.toLowerCase() : String(err);
+
+    if (message.includes("not found")) {
+      return { error: "Categoría no encontrada." };
+    }
+
+    return { error: "Error al actualizar la categoría. Intentá de nuevo." };
+  }
+}
+
+export async function archiveCategory(
+  id: string,
+): Promise<{ success: true } | { error: string }> {
+  try {
+    await requireAdmin();
+
+    await db.category.update({
+      where: { id },
+      data: {
+        deletedAt: new Date(),
+        active: false,
+      },
+    });
+
+    revalidatePath("/admin/categories");
+
+    return { success: true };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message.toLowerCase() : String(err);
+
+    if (message.includes("not found")) {
+      return { error: "Categoría no encontrada." };
+    }
+
+    return { error: "Error al archivar la categoría. Intentá de nuevo." };
+  }
+}
+
+export async function toggleCategoryFeatured(
+  id: string,
+  featured: boolean,
+): Promise<{ success: true } | { error: string }> {
+  try {
+    await requireAdmin();
+
+    await db.category.update({
+      where: { id },
+      data: { featured },
+    });
+
+    revalidatePath("/admin/categories");
+
+    return { success: true };
+  } catch {
+    return { error: "Error al actualizar la categoría." };
+  }
+}
+
+export async function addCategoryImage(
+  categoryId: string,
+  imageKey: string,
+  imageUrl: string,
+): Promise<{ success: true } | { error: string }> {
+  try {
+    await requireAdmin();
+
+    await db.category.update({
+      where: { id: categoryId },
+      data: { image: imageUrl },
+    });
+
+    revalidatePath("/admin/categories");
+    revalidatePath(`/admin/categories/${categoryId}/edit`);
+
+    return { success: true };
+  } catch {
+    return { error: "Error al agregar la imagen." };
+  }
+}
+
+export async function removeCategoryImage(
+  categoryId: string,
+): Promise<{ success: true } | { error: string }> {
+  try {
+    await requireAdmin();
+
+    const category = await db.category.findUnique({
+      where: { id: categoryId },
+      select: { image: true },
+    });
+
+    if (!category) {
+      return { error: "Categoría no encontrada." };
+    }
+
+    // Delete from Cloudinary if image exists (best-effort)
+    if (category.image) {
+      try {
+        // Extract publicId from Cloudinary URL
+        // Format: https://res.cloudinary.com/{cloud}/image/upload/{transforms}/{publicId}.{ext}
+        const urlParts = category.image.split("/");
+        const lastPart = urlParts[urlParts.length - 1] ?? "";
+        const publicId = lastPart.replace(/\.(webp|jpg|jpeg|png|gif)$/i, "");
+        const uploadIndex = urlParts.indexOf("upload");
+        if (uploadIndex > -1 && uploadIndex < urlParts.length - 1) {
+          // Public ID includes folder path after "upload" minus the filename
+          const folderParts = urlParts.slice(uploadIndex + 1);
+          const fullPublicId = folderParts.join("/").replace(/\.(webp|jpg|jpeg|png|gif)$/i, "");
+          await cloudinary.uploader.destroy(fullPublicId);
+        } else {
+          await cloudinary.uploader.destroy(publicId);
+        }
+      } catch {
+        // Cloudinary deletion is best-effort — don't block DB cleanup
+      }
+    }
+
+    await db.category.update({
+      where: { id: categoryId },
+      data: { image: null },
+    });
+
+    revalidatePath("/admin/categories");
+    revalidatePath(`/admin/categories/${categoryId}/edit`);
+
+    return { success: true };
+  } catch {
+    return { error: "Error al eliminar la imagen." };
   }
 }
