@@ -38,10 +38,10 @@ interface StockStatus {
 // ---------------------------------------------------------------------------
 
 function getStockStatus(stock: number): StockStatus {
-  if (stock === 0) return { label: "Out of stock", variant: "out-of-stock" };
+  if (stock === 0) return { label: "Sin stock", variant: "out-of-stock" };
   if (stock <= 10)
-    return { label: `Only ${stock} left`, variant: "low-stock" };
-  return { label: "In stock", variant: "in-stock" };
+    return { label: `Solo quedan ${stock}`, variant: "low-stock" };
+  return { label: "En stock", variant: "in-stock" };
 }
 
 const statusClasses: Record<StockVariant, { dot: string; text: string }> = {
@@ -88,25 +88,22 @@ export function ProductStock({ stock, productId, slug, name, price, currency, im
 
     if (result.success) {
       setJustAdded(true);
-      toast.success("Added to cart", {
+      toast.success("Agregado al carrito", {
         action: {
-          label: "View cart",
+          label: "Ver carrito",
           onClick: () => toggleCart(),
         },
       });
       // Reset feedback state after animation
       setTimeout(() => setJustAdded(false), 1500);
     } else if (result.reason === "mixed-currency") {
-      const otherCurrency =
-        result.currentCurrency === "USD" ? "ARS" : "USD";
       toast.error(
-        `Your cart contains ${result.currentCurrency} items. Clear it to add ${result.newCurrency} products.`,
+        `Tu carrito tiene productos en ${result.currentCurrency}. ¿Querés vaciarlo y agregar este en ${result.newCurrency}?`,
         {
           action: {
-            label: "Clear & add",
+            label: "Vaciar y agregar",
             onClick: () => {
               clearCart();
-              // Retry after clearing
               const retryResult = addItem({
                 productId,
                 slug,
@@ -117,7 +114,7 @@ export function ProductStock({ stock, productId, slug, name, price, currency, im
                 stock,
               });
               if (retryResult.success) {
-                toast.success("Cart cleared — item added in " + currency);
+                toast.success(`Carrito vaciado — producto agregado en ${currency}`);
               }
             },
           },
@@ -149,12 +146,12 @@ export function ProductStock({ stock, productId, slug, name, price, currency, im
         {justAdded ? (
           <>
             <ShoppingBag className="size-4" />
-            Added!
+            ¡Agregado!
           </>
         ) : isOutOfStock ? (
-          "Out of stock"
+          "Sin stock"
         ) : (
-          "Add to cart"
+          "Agregar al carrito"
         )}
       </Button>
     </div>

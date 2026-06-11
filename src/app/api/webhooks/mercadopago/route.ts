@@ -164,10 +164,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         where: { id: order.id },
         data: { status: "CANCELLED" },
       });
+      // Release reserved stock atomically within the same transaction
+      await releaseStock(order.id, tx);
     });
-
-    // Release reserved stock
-    await releaseStock(order.id);
   }
   // For other statuses (e.g. "pending", "in_process") we do nothing —
   // MercadoPago will send another webhook when the status changes.

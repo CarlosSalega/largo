@@ -34,7 +34,7 @@ export function CartSummary({ showCheckout = true }: CartSummaryProps) {
     <div className="space-y-3">
       <div className="flex items-center justify-between border-t border-border pt-3">
         <span className="text-sm text-muted-foreground">
-          Subtotal ({itemCount} {itemCount === 1 ? "item" : "items"})
+          Subtotal ({itemCount} {itemCount === 1 ? "producto" : "productos"})
         </span>
         <span className="text-base font-semibold tabular-nums">
           {formatPrice(subtotal, currency)}
@@ -42,7 +42,7 @@ export function CartSummary({ showCheckout = true }: CartSummaryProps) {
       </div>
       {showCheckout && (
         <Button asChild className="w-full" size="lg">
-          <Link href="/checkout">Proceed to Checkout</Link>
+          <Link href="/checkout">Ir al checkout</Link>
         </Button>
       )}
     </div>
