@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { SafeImage } from "@/components/ui/safe-image";
 import type { ProductImage } from "@/lib/db/types";
 
 interface ProductGalleryProps {
@@ -17,10 +18,8 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
 
   if (images.length === 0) {
     return (
-      <div className="aspect-square w-full rounded-2xl bg-muted flex items-center justify-center">
-        <span className="text-lg font-semibold text-muted-foreground/30">
-          {productName}
-        </span>
+      <div className="aspect-square w-full rounded-2xl bg-muted overflow-hidden">
+        <SafeImage src={null} alt={productName} />
       </div>
     );
   }
@@ -29,10 +28,9 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
     <div className="space-y-4">
       {/* Main image */}
       <div className="aspect-square w-full overflow-hidden rounded-2xl bg-muted">
-        <img
+        <SafeImage
           src={currentImage.url}
           alt={currentImage.alt ?? productName}
-          className="h-full w-full object-cover"
         />
       </div>
 
@@ -54,10 +52,9 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               aria-label={`View image ${index + 1} of ${images.length}`}
               aria-current={index === selectedIndex ? "true" : undefined}
             >
-              <img
+              <SafeImage
                 src={image.url}
                 alt={image.alt ?? `${productName} ${index + 1}`}
-                className="h-full w-full object-cover"
               />
             </button>
           ))}

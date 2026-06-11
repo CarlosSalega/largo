@@ -6,6 +6,7 @@
 
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SafeImage } from "@/components/ui/safe-image";
 import { formatPrice } from "@/lib/formatPrice";
 import { useCartStore } from "@/features/cart/store";
 import type { CartItem as CartItemType } from "@/features/cart/types";
@@ -26,17 +27,7 @@ export function CartItem({ item }: CartItemProps) {
     <div className="flex gap-3 py-3 border-b border-border last:border-b-0">
       {/* Product image */}
       <div className="size-16 shrink-0 rounded-lg bg-muted overflow-hidden">
-        {item.image ? (
-          <img
-            src={item.image}
-            alt={item.name}
-            className="size-full object-cover"
-          />
-        ) : (
-          <div className="size-full flex items-center justify-center text-xs text-muted-foreground">
-            No img
-          </div>
-        )}
+        <SafeImage src={item.image} alt={item.name} />
       </div>
 
       {/* Info + controls */}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
+import { SafeImage } from "@/components/ui/safe-image";
 import { formatPrice } from "@/lib/formatPrice";
 import type { Product, ProductImage, Category, Brand } from "@/lib/db/types";
 
@@ -18,23 +19,15 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link href={`/products/${product.slug}`}>
-      <Card className="group h-full transition-shadow hover:shadow-md">
+      <Card className="group h-full pt-0 transition-shadow hover:shadow-md">
         <CardContent className="p-0 flex flex-col h-full">
           {/* Image */}
-          <div className="aspect-square w-full overflow-hidden rounded-t-xl bg-muted relative">
-            {product.images[0] ? (
-              <img
-                src={product.images[0].url}
-                alt={product.images[0].alt ?? product.name}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-muted to-muted/50">
-                <span className="text-lg font-semibold text-muted-foreground/30">
-                  {product.name}
-                </span>
-              </div>
-            )}
+          <div className="aspect-square w-full overflow-hidden bg-muted relative">
+            <SafeImage
+              src={product.images[0]?.url}
+              alt={product.images[0]?.alt ?? product.name}
+              className="transition-transform duration-300 group-hover:scale-105"
+            />
             {/* Stock badge */}
             {!inStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-background/60 backdrop-blur-[2px]">
