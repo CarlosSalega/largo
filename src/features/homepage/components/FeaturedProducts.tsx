@@ -31,9 +31,9 @@ export function FeaturedProducts({ products }: FeaturedProductsProps) {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((product) => (
             <Link key={product.id} href={`/products/${product.slug}`}>
-              <Card className="group h-full transition-shadow hover:shadow-md">
+              <Card className="group h-full pt-0 transition-shadow hover:shadow-md">
                 <CardContent className="p-0">
-                <div className="aspect-square w-full overflow-hidden rounded-t-xl bg-muted">
+                <div className="aspect-square w-full overflow-hidden bg-muted">
                   <SafeImage
                     src={product.images[0]?.url}
                     alt={product.images[0]?.alt ?? product.name}

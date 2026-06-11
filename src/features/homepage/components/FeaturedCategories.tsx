@@ -25,9 +25,9 @@ export function FeaturedCategories({ categories }: FeaturedCategoriesProps) {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => (
             <Link key={category.id} href={`/catalog?category=${category.slug}`}>
-              <Card className="group h-full transition-shadow hover:shadow-md">
+              <Card className="group h-full pt-0 transition-shadow hover:shadow-md">
                 <CardContent className="p-0">
-                  <div className="aspect-video w-full overflow-hidden rounded-t-xl bg-muted">
+                  <div className="aspect-video w-full overflow-hidden bg-muted">
                     <SafeImage
                       src={category.image}
                       alt={category.name}

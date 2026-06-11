@@ -19,10 +19,10 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link href={`/products/${product.slug}`}>
-      <Card className="group h-full transition-shadow hover:shadow-md">
+      <Card className="group h-full pt-0 transition-shadow hover:shadow-md">
         <CardContent className="p-0 flex flex-col h-full">
           {/* Image */}
-          <div className="aspect-square w-full overflow-hidden rounded-t-xl bg-muted relative">
+          <div className="aspect-square w-full overflow-hidden bg-muted relative">
             <SafeImage
               src={product.images[0]?.url}
               alt={product.images[0]?.alt ?? product.name}
