@@ -5,6 +5,7 @@
 // ---------------------------------------------------------------------------
 
 import { auth } from "@/lib/auth/config";
+import { redirect } from "next/navigation";
 import type {
   SignInInput,
   SignUpInput,
@@ -30,12 +31,7 @@ export async function signUpAction(data: SignUpInput) {
       },
     });
 
-    return { success: true as const };
-  } catch (err: unknown) {
-    // Better Auth throws ZodError for validation failures
-    if (err && typeof err === "object" && "name" in err && err.name === "ZodError") {
-      return { error: "La contraseña debe tener al menos 8 caracteres" };
-    }
+    redirect("/account");
 
     const message =
       err instanceof Error ? err.message.toLowerCase() : String(err);
@@ -58,7 +54,7 @@ export async function signInAction(data: SignInInput) {
       body: { email, password },
     });
 
-    return { success: true as const };
+    redirect("/account");
   } catch (err: unknown) {
     const message =
       err instanceof Error ? err.message.toLowerCase() : String(err);
@@ -85,7 +81,7 @@ export async function signOutAction() {
       headers: await headers(),
     });
 
-    return { success: true as const };
+    redirect("/");
   } catch {
     return { error: "Error al cerrar sesión" };
   }

@@ -31,6 +31,8 @@ export default function IngresarPage() {
     formState: { errors },
   } = useForm<SignInInput>({
     resolver: zodResolver(signInSchema) as unknown as Resolver<SignInInput>,
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
   });
 
   // Clear validation state when switching modes
@@ -46,11 +48,8 @@ export default function IngresarPage() {
 
       if (result.error) {
         toast.error(result.error);
-      } else {
-        toast.success("¡Bienvenido!");
-        router.refresh();
-        router.push("/account");
       }
+      // Success → Server Action handles redirect via next/navigation
     } catch {
       toast.error("Error de conexión. Intentá de nuevo.");
     } finally {
