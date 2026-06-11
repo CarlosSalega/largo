@@ -202,7 +202,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-019: Install form dependencies + nanoid
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `package.json`
 **Description**: `npm install react-hook-form@7.57.0 @hookform/resolvers@5.0.1 zod@4.1.8 nanoid@5.1.4`
 **Acceptance**: Imports resolve. `npm run build` succeeds.
@@ -211,7 +211,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-020: Create Zod checkout schemas
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/schemas.ts` (new)
 **Description**: Define `customerSchema`: `name` (min 1), `email` (email format), `phone` (optional). `shippingSchema`: `street`, `city`, `state`, `zipCode`, `country` (all required, country defaults `"Argentina"`). Compose `checkoutSchema` merging both.
 **Acceptance**: Valid data passes `.parse()`. Empty name → ZodError. Invalid email → ZodError.
@@ -220,7 +220,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-021: Create checkout types
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/types.ts` (new)
 **Description**: `CheckoutFormData` combining customer + shipping. `CheckoutStep: "customer" | "shipping" | "review"`. `CheckoutState` for wizard.
 **Acceptance**: Types compile. `CheckoutStep` union restricts to 3 valid values.
@@ -229,7 +229,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-022: Create CustomerStep component
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/components/CustomerStep.tsx` (new)
 **Description**: "use client". `react-hook-form` fields for `name` (input), `email` (input type=email), `phone` (input type=tel, optional). Zod resolver via `@hookform/resolvers/zod`. Labels/placeholders in Spanish. "Continuar" button advances to shipping step.
 **Acceptance**: Fill fields → click Continuar → validated → advances. Empty name → inline error. Bad email → inline error.
@@ -238,7 +238,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-023: Create ShippingStep component
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/components/ShippingStep.tsx` (new)
 **Description**: "use client". Fields: `street`, `city`, `state`, `zipCode`, `country` (default "Argentina"). Zod validation. "Volver" (back to customer) and "Continuar" (advance to review) buttons. Form data preserved when going back.
 **Acceptance**: Fill fields → validated → advances. Empty required → inline error. Back preserves CustomerStep data.
@@ -247,7 +247,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-024: Create OrderSummary component (checkout review)
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/components/OrderSummary.tsx` (new)
 **Description**: "use client". Read-only. Lists each cart item (name, qty, unit price with currency via formatPrice, line subtotal). Shows cart total at bottom. "Confirmar pedido" button triggers `confirmCheckout` Server Action.
 **Acceptance**: Items match cart store. Totals correct. Currency displayed correctly.
@@ -256,7 +256,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-025: Create ReviewStep component
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/components/ReviewStep.tsx` (new)
 **Description**: "use client". Shows: customer info summary (name, email, phone), shipping address summary, OrderSummary. "Volver" button (back to shipping). "Confirmar pedido" triggers Server Action. Loading state while tx pending. Error message display.
 **Acceptance**: All data from previous steps visible. Confirm triggers action. Loading spinner shown. Errors displayed inline.
@@ -265,7 +265,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-026: Create CheckoutForm wizard
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/components/CheckoutForm.tsx` (new)
 **Description**: "use client". Manages `currentStep: CheckoutStep`. Step indicator at top showing progress (1/3 → Customer, 2/3 → Shipping, 3/3 → Review). Renders CustomerStep, ShippingStep, or ReviewStep based on state. `react-hook-form` `FormProvider` wrapping all steps so data persists across navigation.
 **Acceptance**: Navigate 1→2→3 and back. Data preserved when going back. Step indicator updates.
@@ -274,7 +274,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-027: Implement `generateOrderNumber`
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/actions.ts` (new)
 **Description**: Use `nanoid(12)` to generate 12-char order number. In `confirmCheckout`, retry on `P2002` unique constraint (max 3 retries).
 **Acceptance**: Generated string is 12 chars, URL-safe. No prefix. Retry logic handles collision.
@@ -283,7 +283,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-028: Implement `releaseExpiredStock`
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/actions.ts` (modify)
 **Description**: Inside `confirmCheckout` transaction, run `$queryRaw`: `UPDATE Product SET stock = stock + oi.quantity FROM OrderItem oi JOIN "Order" o ON oi.orderId = o.id WHERE o.status = 'PENDING' AND o.createdAt < NOW() - INTERVAL '30 minutes' AND oi.productId = Product.id`. Stock released from expired PENDING orders. Orders stay PENDING.
 **Acceptance**: Create PENDING order, wait (or manually set createdAt), run cleanup → stock restored.
@@ -292,7 +292,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-029: Implement `confirmCheckout` Server Action
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/features/checkout/actions.ts` (modify)
 **Description**: "use server". Input: `{ customer, shipping, cartItems }`. Steps inside `prisma.$transaction`: (1) Validate stock: `SELECT stock FROM Product WHERE id IN (...)` — reject if any < quantity. (2) `releaseExpiredStock`. (3) INSERT Order (orderNumber via nanoid, status PENDING, customer fields, subtotal, total, userId=null). (4) INSERT OrderItem[] (productId, productName, productPrice, productImage, quantity, subtotal). (5) INSERT Address. (6) INSERT Payment (status PENDING, provider "mercadopago", amount=total, currency from cart). (7) UPDATE Product SET stock = stock - qty WHERE id=? AND stock >= qty (per item). Return `{ orderId, orderNumber }`. Catch errors → return `{ error }`.
 **Acceptance**: Valid checkout → Order + Items + Address + Payment in DB. Stock decremented. Cart NOT cleared server-side (client calls clearCart on success). Race condition → transaction rolls back → error returned.
@@ -301,7 +301,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-030: Create checkout page at `/checkout`
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/app/(public)/checkout/page.tsx` (new)
 **Description**: Server component wrapper. Client component inside reads cart. If cart empty → `redirect("/cart")` with sonner toast "Agregá productos al carrito antes de continuar". Otherwise renders CheckoutForm.
 **Acceptance**: `/checkout` with items → shows form. `/checkout` empty → redirects to `/cart`.
@@ -310,7 +310,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-031: Create success page placeholder
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/app/(public)/checkout/success/page.tsx` (new)
 **Description**: Server component. Reads `searchParams.orderNumber`. Shows "¡Pedido confirmado!" heading, order number, static "Pago recibido" message. Full order data wired in PR 4. Sets `noindex` meta.
 **Acceptance**: `/checkout/success?orderNumber=xxx` shows confirmation. Page title: "Pedido confirmado | Largo".
@@ -319,7 +319,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-032: Create failure page placeholder
 **PR**: 2
-**Status**: pending
+**Status**: done
 **Files**: `src/app/(public)/checkout/failure/page.tsx` (new)
 **Description**: Server component. Shows "El pago no pudo ser procesado", order number from `searchParams`. Static "Volver al carrito" link. Retry button wired in PR 4.
 **Acceptance**: `/checkout/failure?orderNumber=xxx` shows failure message. Link back to cart works.
