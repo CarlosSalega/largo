@@ -30,10 +30,7 @@ export async function signUpAction(data: SignUpInput) {
         name: defaultName(email),
       },
     });
-
-    redirect("/account");
   } catch (err: unknown) {
-    // Better Auth throws ZodError for validation failures
     if (err && typeof err === "object" && "name" in err && err.name === "ZodError") {
       return { error: "La contraseña debe tener al menos 8 caracteres" };
     }
@@ -47,6 +44,8 @@ export async function signUpAction(data: SignUpInput) {
 
     return { error: "Error al crear la cuenta. Intentá de nuevo." };
   }
+
+  redirect("/account");
 }
 
 // ---- signInAction -----------------------------------------------------------
@@ -58,8 +57,6 @@ export async function signInAction(data: SignInInput) {
     await auth.api.signInEmail({
       body: { email, password },
     });
-
-    redirect("/account");
   } catch (err: unknown) {
     const message =
       err instanceof Error ? err.message.toLowerCase() : String(err);
@@ -75,6 +72,8 @@ export async function signInAction(data: SignInInput) {
 
     return { error: "Error al iniciar sesión. Intentá de nuevo." };
   }
+
+  redirect("/account");
 }
 
 // ---- signOutAction ----------------------------------------------------------
@@ -85,11 +84,11 @@ export async function signOutAction() {
     await auth.api.signOut({
       headers: await headers(),
     });
-
-    redirect("/");
   } catch {
     return { error: "Error al cerrar sesión" };
   }
+
+  redirect("/");
 }
 
 // ---- updateProfileAction ----------------------------------------------------
