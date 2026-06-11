@@ -404,7 +404,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-041: Add MercadoPago env vars to `.env.example`
 **PR**: 3
-**Status**: pending
+**Status**: done
 **Files**: `.env.example`
 **Description**: Add: `MERCADOPAGO_ACCESS_TOKEN=TEST-...`, `MERCADOPAGO_WEBHOOK_SECRET=`, `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
 **Acceptance**: `.env.example` includes all three vars with placeholder values and comments.
@@ -413,7 +413,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-042: Handle webhook `not_found` payment scenario
 **PR**: 3
-**Status**: pending
+**Status**: done
 **Files**: `src/app/api/webhooks/mercadopago/route.ts` (modify)
 **Description**: If `getMPPayment` returns 404 or no payment found, return 404 to MP. If payment found but no matching Payment record in DB (by MP payment's external_reference metadata), return 404.
 **Acceptance**: Stale/malformed webhook → 404. MP retries without side effects.
@@ -426,7 +426,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-043: Implement `getOrderByNumber` query
 **PR**: 4
-**Status**: pending
+**Status**: done
 **Files**: `src/features/orders/queries.ts` (modify)
 **Description**: Export `getOrderByNumber(orderNumber)`. Queries `db.order.findUnique({ where: { orderNumber }, include: { items: true, address: true, payment: true } })`. Returns null if not found.
 **Acceptance**: Returns full order with items, address, payment for valid orderNumber. Returns null for nonexistent.
@@ -435,7 +435,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-044: Create OrderStatusBadge component
 **PR**: 4
-**Status**: pending
+**Status**: done
 **Files**: `src/features/orders/components/OrderStatusBadge.tsx` (new)
 **Description**: "use client". Maps `OrderStatus` → Spanish label + color badge. PENDING → "Pendiente de pago" (amber), PAID → "Pagado" (emerald), CANCELLED → "Cancelado" (destructive), REFUNDED → "Reembolsado" (slate).
 **Acceptance**: Renders correct color and label for each status.
@@ -444,7 +444,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-045: Create OrderDetail component
 **PR**: 4
-**Status**: pending
+**Status**: done
 **Files**: `src/features/orders/components/OrderDetail.tsx` (new)
 **Description**: Server component. Receives full Order with items, address, payment. Displays: orderNumber + status badge, item list (productName, qty, productPrice snapshot via formatPrice, subtotal), total with currency, shipping address, customer info (name, email), payment status, creation date.
 **Acceptance**: All order data rendered correctly. Currency formatted. Status badge correct.
@@ -453,7 +453,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-046: Create public order detail page
 **PR**: 4
-**Status**: pending
+**Status**: done
 **Files**: `src/app/(public)/orders/[orderNumber]/page.tsx` (new)
 **Description**: Server component. `params.orderNumber` → `getOrderByNumber`. If null → `notFound()`. Otherwise renders OrderDetail. Sets metadata: title "Pedido {orderNumber} | Largo", `noindex`.
 **Acceptance**: `/orders/V1StGXR8_Z5jd` shows full order. `/orders/nonexistent` → 404 page.
@@ -462,7 +462,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-047: Wire success page with real order data
 **PR**: 4
-**Status**: pending
+**Status**: done
 **Files**: `src/app/(public)/checkout/success/page.tsx` (modify)
 **Description**: Replace placeholder with `searchParams.orderNumber` → `getOrderByNumber`. Show: "¡Pedido confirmado!" heading, order number, OrderDetail summary (items, total), status ("Pago recibido — estamos procesando tu pedido"). Link "Seguir comprando" → `/catalog`. Preserve `noindex`.
 **Acceptance**: After MP redirect, success page shows real order. Order number matches. Items displayed.
@@ -471,7 +471,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-048: Wire failure page with retry option
 **PR**: 4
-**Status**: pending
+**Status**: done
 **Files**: `src/app/(public)/checkout/failure/page.tsx` (modify)
 **Description**: Replace placeholder. Read `searchParams.orderNumber` → `getOrderByNumber`. Show: "El pago no pudo ser procesado", order number, order summary. "Reintentar pago" button calls `createPreference` for this order (Server Action). "Volver al carrito" link. For expired preference, show "La sesión de pago expiró".
 **Acceptance**: Failure page shows real order. Retry creates new preference. Redirect to MP works.
@@ -480,7 +480,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-049: Add SEO metadata to order pages
 **PR**: 4
-**Status**: pending
+**Status**: done
 **Files**: `src/app/(public)/orders/[orderNumber]/page.tsx` (modify), `src/app/(public)/checkout/success/page.tsx` (modify), `src/app/(public)/checkout/failure/page.tsx` (modify)
 **Description**: All order-related pages: set `robots: "noindex, nofollow"`. Dynamic metadata for order detail page (title includes orderNumber). Ensure description tags present.
 **Acceptance**: `noindex` meta on all 3 pages. Order detail page title dynamic.
