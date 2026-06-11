@@ -10,6 +10,9 @@ Full-stack Next.js application using App Router for both frontend and backend. N
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4
 - **UI Components**: Shadcn UI (radix-nova style)
+- **Component tokens**: ALWAYS use semantic tokens (`bg-card`, `text-card-foreground`, `border-border`, `bg-primary`, `text-muted-foreground`, etc.). NEVER use hardcoded Tailwind colors (`slate-*`, `blue-*`, `red-*`, `white`, `green-*`). Semantic tokens are defined in `globals.css` via CSS variables and adapt to theme changes automatically.
+- **Badge pattern**: Use `variant="default"` for "active" status badges (`bg-primary text-primary-foreground`). Do NOT override with hardcoded green classes.
+- **Image component**: Use `SafeImage` (wraps `next/image` with `fill` + fallback) for all images. Parent must have `relative` + fixed size. Do NOT use raw `<img>` tags.
 - **Icons**: Lucide React
 - **Forms**: React Hook Form + Zod validation
 
@@ -31,20 +34,42 @@ Full-stack Next.js application using App Router for both frontend and backend. N
 - **Migrations**: `prisma/migrations/`
 - **Seed**: `prisma/seed.ts`
 
-### Prisma 7 Notes
+### Prisma 7 + Neon Gotchas
 
-Prisma 7 introduces a breaking change: the `datasource.url` property is no longer supported in `schema.prisma`. Connection URLs are moved to `prisma.config.ts` using `defineConfig()`. The `PrismaClient` constructor requires a driver adapter (`@prisma/adapter-pg` for PostgreSQL TCP connections) or an `accelerateUrl` for Prisma Accelerate.
-
-```
-prisma.config.ts  →  defineConfig({ datasource: { url: env("DATABASE_URL") } })
-schema.prisma     →  datasource db { provider = "postgresql" }  (no url)
-client.ts         →  new PrismaClient({ adapter: new PrismaPg({ connectionString }) })
-```
+- **`migrate dev` non-interactive**: The `prisma migrate dev` command doesn't work in CI/non-interactive environments. Use `prisma db execute` + manual SQL + `prisma migrate resolve --applied` to create and apply migrations.
+- **`DATABASE_URL` resolution**: Prisma 7's `prisma.config.ts` uses `env("DATABASE_URL")` which may fail if `.env` isn't loaded. Export env vars explicitly or use `dotenv-cli`.
+- **SSL mode**: Use `?sslmode=verify-full` for Neon connections. `require` mode triggers deprecation warnings in Prisma 7 + pg adapter.
+- **NULL constraints**: Prisma 7's pg adapter is strict about NOT NULL columns. If a column exists in the DB table but was removed from the Prisma schema, Prisma Client won't send a value for it and PostgreSQL rejects the INSERT. Drop dead columns rather than keeping them.
+- **Better Auth requirements**: The `user` model MUST include `emailVerified Boolean @default(false)` — Better Auth's Prisma adapter sets this field regardless of `requireEmailVerification` setting.
+- **Upsert issue**: `prisma.user.upsert()` may fail with `NullConstraintViolation` on Neon. Use `findUnique` + `create` as a workaround in seed scripts.
+- **SSL warnings**: `sslmode=require` on Neon triggers `SECURITY WARNING` about future SSL mode changes. Use `sslmode=verify-full` to suppress.
 
 ## Authentication
 
-- **Provider**: Better Auth
+- **Provider**: Better Auth v1.6.16
+- **Adapter**: `@better-auth/prisma-adapter` (PostgreSQL)
 - **Roles**: ADMIN, CUSTOMER
+- **Route protection**: `proxy.ts` (Next.js 16) — session check for `/account/*`, role check for `/admin/*`
+- **Server guard**: `requireAdmin()` in `src/lib/auth/utils.ts` for Server Components/Actions
+
+### Better Auth — Cookie Golden Rule
+
+**ALL operations that set or clear cookies (sign-in, sign-up, sign-out) MUST use `authClient` (client-side). NEVER use Server Actions for these operations.**
+
+| Operation | Mechanism | Why |
+|-----------|-----------|-----|
+| Sign in | `authClient.signIn.email()` | Sets session cookie via API route response |
+| Sign up | `authClient.signUp.email()` | Sets session cookie via API route response |
+| Sign out | `authClient.signOut()` | Clears session cookie via API route response |
+| Profile update | Server Action (`updateProfileAction`) | No cookie change needed |
+| Password change | Server Action (`changePasswordAction`) | No cookie change needed |
+| Session read (RSC) | `auth.api.getSession({ headers })` | Direct DB read, no cookie needed |
+
+**Why**: Server Actions cannot set or clear HTTP `Set-Cookie` headers. Only the Better Auth API route handler (`toNextJsHandler`) has access to response headers. Using `authClient` makes a fetch to `/api/auth/*`, allowing the handler to manage cookies properly.
+
+**Post-auth redirect**: After sign-in/sign-up/sign-out, use `window.location.href` (full page reload) instead of `router.push()`. Full reload ensures cookies are sent/cleared in the HTTP request. `redirect()` from `next/navigation` is NOT suitable because it throws `NEXT_REDIRECT` which must be outside try/catch blocks.
+
+**Turbopack cache**: After changing auth code, run `rm -rf .next` before restarting the dev server. Turbopack caches stale chunks that reference old imports.
 
 ## Payments
 
