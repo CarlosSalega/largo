@@ -40,11 +40,11 @@ Chain strategy: feature-branch-chain
 
 ## Phase 2: Image Upload + Drag & Drop (PR 2)
 
-- [ ] 2.1 Install `@dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities` + shadcn `input textarea select label switch form`
-- [ ] 2.2 Create `src/app/api/admin/upload/route.ts`: POST (FormData→Cloudinary) + DELETE handlers, ADMIN auth
-- [ ] 2.3 Create `src/hooks/use-image-upload.ts` (upload, progress, remove) + `src/hooks/use-image-reorder.ts` (drag-and-drop via @dnd-kit)
-- [ ] 2.4 Create `src/components/admin/ImageUpload.tsx`: drag/click zone, sortable preview grid, progress bar, remove, empty/disabled/max states
-- [ ] 2.5 Verify `pnpm build` + `pnpm lint`
+- [x] 2.1 Install `@dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities` (shadcn form inputs already installed in PR 1)
+- [x] 2.2 Create `src/app/api/admin/upload/route.ts`: POST (FormData→Cloudinary) + DELETE handlers, ADMIN auth
+- [x] 2.3 Create `src/features/admin/hooks/use-image-upload.ts` (upload, progress, remove) + `src/features/admin/hooks/use-image-reorder.tsx` (drag-and-drop via @dnd-kit)
+- [x] 2.4 Create `src/components/admin/ImageUpload.tsx`: drag/click zone, sortable preview grid, progress bar, remove, empty/disabled/max states
+- [x] 2.5 Verify `pnpm build` + `pnpm lint`
 
 ## Phase 3: Product CRUD + Brand + Sidebar (PR 3)
 
