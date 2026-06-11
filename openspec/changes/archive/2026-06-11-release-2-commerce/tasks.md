@@ -32,7 +32,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-001: Add `currency` field to Product model
 **PR**: 0
-**Status**: pending
+**Status**: done
 **Files**: `prisma/schema.prisma`
 **Description**: Add `currency String @default("USD")` field to Product model. Run `prisma migrate dev` to generate migration.
 **Acceptance**: `prisma validate` passes. Migration file exists in `prisma/migrations/`.
@@ -41,7 +41,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-002: Create centralized `formatPrice` utility
 **PR**: 0
-**Status**: pending
+**Status**: done
 **Files**: `src/lib/formatPrice.ts` (new)
 **Description**: Create `formatPrice(value: number | Decimal, currency: string, locale?: string): string` using `Intl.NumberFormat`. Supports USD (`en-US`) and ARS (`es-AR`). Export `toNumber` helper.
 **Acceptance**: `formatPrice(1500, "ARS")` returns `"$ 1.500,00"`. `formatPrice(49.99, "USD")` returns `"$49.99"`.
@@ -50,7 +50,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-003: Refactor all existing `formatPrice` callers
 **PR**: 0
-**Status**: pending
+**Status**: done
 **Files**: `src/features/product-detail/queries.ts`, `src/features/catalog/components/ProductCard.tsx`, `src/features/homepage/components/FeaturedProducts.tsx`
 **Description**: Remove inline `formatPrice` definitions. Import centralized `formatPrice` from `@/lib/formatPrice`. Pass currency from product data. Update `ProductInfo.tsx` call site.
 **Acceptance**: All three call sites compile. Homepage and catalog display prices correctly with USD format.
@@ -59,7 +59,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-004: Update seed data with currency values
 **PR**: 0
-**Status**: pending
+**Status**: done
 **Files**: `prisma/seed.ts`
 **Description**: Add `currency` field to each product in seed. Most products get `"USD"`. ARS-priced products (if any) get `"ARS"`.
 **Acceptance**: `npm run db:seed` succeeds. Products in DB have `currency` populated (not null).
@@ -68,7 +68,7 @@ Chain strategy: stacked-to-main
 
 ### TASK-005: Regenerate Prisma client types
 **PR**: 0
-**Status**: pending
+**Status**: done
 **Files**: `node_modules/.prisma/client/` (generated)
 **Description**: Run `prisma generate` so TypeScript sees the new `Product.currency` field.
 **Acceptance**: `npm run build` compiles without errors.
