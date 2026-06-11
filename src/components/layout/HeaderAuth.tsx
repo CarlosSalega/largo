@@ -6,7 +6,7 @@
 // ---------------------------------------------------------------------------
 
 import Link from "next/link";
-import { signOutAction } from "@/features/customers/actions";
+import { authClient } from "@/lib/auth/client";
 
 interface HeaderAuthProps {
   authenticated: boolean;
@@ -26,7 +26,7 @@ export function HeaderAuth({ authenticated, role }: HeaderAuthProps) {
   }
 
   async function handleSignOut() {
-    await signOutAction();
+    await authClient.signOut();
     window.location.href = "/";
   }
 

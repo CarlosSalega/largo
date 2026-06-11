@@ -1,17 +1,12 @@
 "use client";
 
-// ---------------------------------------------------------------------------
-// SignOutButton — client component wrapping signOutAction in a form
-// Uses window.location.href for full reload with cookie clearing
-// ---------------------------------------------------------------------------
-
-import { signOutAction } from "@/features/customers/actions";
+import { authClient } from "@/lib/auth/client";
 
 export function SignOutButton() {
   return (
     <form
       action={async () => {
-        await signOutAction();
+        await authClient.signOut();
         window.location.href = "/";
       }}
     >
