@@ -29,3 +29,24 @@ export async function releaseStock(orderId: string): Promise<void> {
     );
   });
 }
+
+// ---- getOrderByNumber ------------------------------------------------------
+
+/**
+ * Fetch a complete order by its public order number.
+ *
+ * Includes items (product snapshots), shipping address, and payment info.
+ * Returns `null` when no order matches the given order number.
+ *
+ * Used by the public order detail page and checkout success/failure pages.
+ */
+export async function getOrderByNumber(orderNumber: string) {
+  return db.order.findUnique({
+    where: { orderNumber },
+    include: {
+      items: true,
+      address: true,
+      payment: true,
+    },
+  });
+}
