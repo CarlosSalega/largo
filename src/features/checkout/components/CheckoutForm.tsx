@@ -15,6 +15,7 @@ import { ShippingStep } from "./ShippingStep";
 import { ReviewStep } from "./ReviewStep";
 import { confirmCheckout } from "../actions";
 import type { CheckoutFormData, CheckoutStep } from "../types";
+import type { Resolver } from "react-hook-form";
 
 // ---- Step indicator -------------------------------------------------------
 
@@ -39,7 +40,8 @@ export function CheckoutForm() {
   const items = useCartStore((s) => s.items);
 
   const methods = useForm<CheckoutFormData>({
-    resolver: zodResolver(checkoutSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(checkoutSchema) as unknown as Resolver<CheckoutFormData>,
     defaultValues: {
       name: "",
       email: "",

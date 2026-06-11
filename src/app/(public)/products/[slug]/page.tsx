@@ -80,7 +80,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     "@type": "Product",
     name: product.name,
     description: product.description,
-    image: product.images.map((img) => img.url),
+    image: product.images.map((img: { url: string }) => img.url),
     brand: {
       "@type": "Brand",
       name: product.brand.name,

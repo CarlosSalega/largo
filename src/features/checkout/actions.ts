@@ -5,7 +5,7 @@
 // ---------------------------------------------------------------------------
 
 import { nanoid } from "nanoid";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import db from "@/lib/db/client";
 import type {
   ConfirmCheckoutInput,
@@ -217,8 +217,10 @@ export async function confirmCheckout(
 
       // P2002: unique constraint on orderNumber → retry
       if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === "P2002"
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        (error as { code: string }).code === "P2002"
       ) {
         if (attempt < MAX_RETRIES - 1) continue;
         return {
