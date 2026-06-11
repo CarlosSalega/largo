@@ -3,12 +3,15 @@ export type {
   Category,
   Product,
   ProductImage,
-  User,
+  user as User,
   Order,
   OrderItem,
   Address,
   Payment,
   WebhookEvent,
+  session,
+  account,
+  verification,
   Prisma,
 } from "@prisma/client";
 
