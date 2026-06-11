@@ -49,7 +49,7 @@ export default function IngresarPage() {
         toast.error(error.message ?? "Error al procesar la solicitud");
       } else {
         toast.success("¡Bienvenido!");
-        window.location.href = "/account";
+        window.location.href = "/account/orders";
       }
     } catch {
       toast.error("Error de conexión. Intentá de nuevo.");
