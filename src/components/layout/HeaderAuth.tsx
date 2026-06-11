@@ -2,28 +2,39 @@
 
 // ---------------------------------------------------------------------------
 // HeaderAuth — auth-aware section for the site header
-// Renders "Ingresar" (guest) or "Mi cuenta" + "Salir" (authenticated)
+// Guest: "Ingresar" outline button CTA
+// Authenticated: avatar circle → DropdownMenu with account links + sign out
 // ---------------------------------------------------------------------------
 
 import Link from "next/link";
+import { User, Shield, LogOut } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface HeaderAuthProps {
   authenticated: boolean;
+  userName?: string;
   role?: string;
 }
 
-export function HeaderAuth({ authenticated, role }: HeaderAuthProps) {
+export function HeaderAuth({ authenticated, userName, role }: HeaderAuthProps) {
   if (!authenticated) {
     return (
-      <Link
-        href="/ingresar"
-        className="text-sm text-card-foreground transition-colors hover:text-card-foreground"
-      >
-        Ingresar
-      </Link>
+      <Button variant="outline" size="sm" asChild>
+        <Link href="/ingresar">Ingresar</Link>
+      </Button>
     );
   }
+
+  const initial = userName?.charAt(0).toUpperCase() ?? "";
 
   async function handleSignOut() {
     await authClient.signOut();
@@ -31,29 +42,41 @@ export function HeaderAuth({ authenticated, role }: HeaderAuthProps) {
   }
 
   return (
-    <>
-      {role === "ADMIN" && (
-        <Link
-          href="/admin"
-          className="text-sm text-card-foreground transition-colors hover:text-card-foreground"
-        >
-          Admin
-        </Link>
-      )}
-      <Link
-        href="/account"
-        className="text-sm text-card-foreground transition-colors hover:text-card-foreground"
-      >
-        Mi cuenta
-      </Link>
-      <form action={handleSignOut}>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
         <button
-          type="submit"
-          className="text-sm text-muted-foreground transition-colors hover:text-card-foreground"
+          type="button"
+          className="flex size-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          aria-label="Menú de usuario"
         >
-          Salir
+          {initial || <User />}
         </button>
-      </form>
-    </>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuGroup>
+          <DropdownMenuItem asChild>
+            <Link href="/account">
+              <User />
+              Mi cuenta
+            </Link>
+          </DropdownMenuItem>
+          {role === "ADMIN" && (
+            <DropdownMenuItem asChild>
+              <Link href="/admin">
+                <Shield />
+                Admin
+              </Link>
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem variant="destructive" onSelect={handleSignOut}>
+            <LogOut />
+            Salir
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

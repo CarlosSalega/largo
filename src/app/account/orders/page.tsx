@@ -5,10 +5,12 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import Link from "next/link";
+import { ChevronRight, Package } from "lucide-react";
 import { auth } from "@/lib/auth/config";
 import { getCustomerOrders } from "@/features/customers/queries";
 import { OrderStatusBadge } from "@/features/orders/components/OrderStatusBadge";
 import { formatPrice } from "@/lib/formatPrice";
+import { Button } from "@/components/ui/button";
 
 // ---- metadata --------------------------------------------------------------
 
@@ -37,7 +39,9 @@ export default async function OrdersPage() {
   if (!session) {
     return (
       <div className="py-16 text-center">
-        <h2 className="text-xl font-bold text-card-foreground">No autorizado</h2>
+        <h2 className="text-xl font-bold text-card-foreground">
+          No autorizado
+        </h2>
         <p className="mt-2 text-muted-foreground">
           Iniciá sesión para ver tus órdenes.
         </p>
@@ -57,19 +61,17 @@ export default async function OrdersPage() {
 
   if (orders.length === 0) {
     return (
-      <div className="py-16 text-center">
-        <h2 className="text-xl font-bold text-card-foreground">
+      <div className="flex flex-col items-center justify-center py-20">
+        <Package className="size-12 text-muted-foreground" />
+        <h2 className="mt-4 text-xl font-bold text-card-foreground">
           Todavía no hiciste ningún pedido
         </h2>
         <p className="mt-2 text-muted-foreground">
           Explorá nuestro catálogo y hacé tu primer pedido.
         </p>
-        <Link
-          href="/catalog"
-          className="mt-4 inline-block rounded-lg bg-primary px-4 py-2 text-sm font-medium text-card-foreground transition-colors hover:bg-primary/80"
-        >
-          Ver catálogo
-        </Link>
+        <Button variant="default" size="sm" className="mt-6" asChild>
+          <Link href="/catalog">Ver catálogo</Link>
+        </Button>
       </div>
     );
   }
@@ -80,27 +82,30 @@ export default async function OrdersPage() {
     <div>
       <h1 className="text-2xl font-bold text-card-foreground">Mis órdenes</h1>
 
-      <div className="mt-6 divide-y divide-border rounded-lg border border-border bg-card">
+      <div className="mt-6 flex flex-col gap-3">
         {orders.map((order) => (
           <Link
             key={order.id}
             href={`/account/orders/${order.orderNumber}`}
-            className="flex items-center justify-between px-4 py-4 transition-colors hover:bg-muted/50"
+            className="group flex items-center gap-4 rounded-lg border border-border bg-card px-5 py-4 transition-colors hover:bg-muted/50"
           >
-            <div className="min-w-0 flex-1">
-              <p className="font-mono text-sm font-medium text-card-foreground">
-                #{order.orderNumber}
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {formatDate(order.createdAt)}
-              </p>
+            <div className="flex flex-1 items-center gap-4 min-w-0">
+              <div className="shrink-0">
+                <p className="font-mono text-sm font-semibold text-card-foreground">
+                  #{order.orderNumber}
+                </p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  {formatDate(order.createdAt)}
+                </p>
+              </div>
+              <div className="flex flex-1 items-center justify-end gap-4">
+                <OrderStatusBadge status={order.status} />
+                <span className="text-sm font-semibold text-card-foreground tabular-nums">
+                  {formatPrice(order.total, order.payment?.currency ?? "ARS")}
+                </span>
+              </div>
             </div>
-            <div className="flex items-center gap-4">
-              <OrderStatusBadge status={order.status} />
-              <span className="text-sm font-medium text-card-foreground">
-                {formatPrice(order.total, order.payment?.currency ?? "ARS")}
-              </span>
-            </div>
+            <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
           </Link>
         ))}
       </div>

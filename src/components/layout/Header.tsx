@@ -23,6 +23,7 @@ export async function Header() {
           <Navigation />
           <HeaderAuth
             authenticated={!!session}
+            userName={session?.user.name}
             role={session?.user.role}
           />
           <CartIcon />
